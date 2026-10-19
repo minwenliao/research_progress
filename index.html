@@ -37,16 +37,16 @@
           <p>With 45 training demos per task, success reaches <strong>95%</strong> on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on block return, but only <strong>38.1%</strong> overall. The model learns several manipulation sequences reliably from few demonstrations, while hidden-target selection (<strong>4%</strong>) and counting (<strong>3%</strong>) remain weak. High success on individual tasks does not establish reliable use of past cues across the benchmark.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">Memory content guides the return location</h3>
-          <p>Replacing memory with another episode’s memory redirected the robot toward that episode’s starting mat in <strong>8/8</strong> block-return trials. This intervention provides causal evidence that stored episode information influences target selection in this task; the success rate alone would not establish that.</p>
+          <h3 id="finding-memory">At test time, memory content guides the return location</h3>
+          <p>Keeping the trained model and current observation fixed, we replaced its TTT memory with memory from another episode. In <strong>8/8</strong> block-return trials, the robot redirected the block toward the starting mat recorded in the replacement memory. This shows that, at test time, the policy uses the <strong>content of stored memory</strong> to choose a return location. The evidence is specific to this task and intervention.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
           <h3 id="finding-persistence">Retaining history helps when blocks must return to earlier locations</h3>
           <p>In the 200-demo runs, TTT memory achieves <strong>20/20</strong> on <a href="#update-put_back_block">block return</a> and <strong>8/20</strong> on <a href="#update-place_block_mat">multiple-block return</a>, versus <strong>7/20</strong> and <strong>0/20</strong> for <strong>w/o persistent memory</strong>, which resets TTT state during both training and evaluation. <a href="#update-swap_blocks">Block swapping</a> is closer: <strong>17/20 vs. 15/20</strong>. The clearest benefits here are on tasks requiring a return to an earlier location; persistent memory does not improve every task equally.</p>
         </article>
         <article class="finding" aria-labelledby="finding-train-eval">
-          <h3 id="finding-train-eval">Training with memory can make a policy depend on it at evaluation</h3>
-          <p>In the <a href="#controls">earlier reported 16-step block-ordering comparison</a>, resetting the same 6k checkpoint only at evaluation drops success from <strong>26/100 to 0/100</strong>. A separate model trained and evaluated with resets reaches <strong>30/100</strong>. The trained policy depends on its accumulated memory, while a policy trained under reset can still succeed. This makes training-time memory behavior part of the evaluation protocol.</p>
+          <h3 id="finding-train-eval">Clearing memory at test time can break a policy trained to use it</h3>
+          <p>In the <a href="#controls">earlier reported 16-step block-ordering comparison</a>, resetting the same 6k checkpoint only at evaluation drops success from <strong>26/100 to 0/100</strong>. A separate model trained and evaluated with resets reaches <strong>30/100</strong>. <strong>w/o persistent memory at evaluation only</strong> therefore tests the trained policy’s dependence on history; <strong>w/o persistent memory during training and evaluation</strong> tests a separately learned policy. The former can fail even when the latter succeeds.</p>
           <p>These ablations test <strong>retention across calls</strong>. All TTT variants still update and read within each call, so they do not establish that disabling updates during either training or evaluation causes failure.</p>
         </article>
         <article class="finding" aria-labelledby="finding-scaling">
