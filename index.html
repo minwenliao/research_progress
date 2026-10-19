@@ -29,31 +29,26 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>We add test-time training (TTT) memory to pretrained Flex-π to test whether earlier observations guide later actions.</p>
+        <p>We study whether TTT memory helps Flex-π use earlier observations when acting. With 45 training demonstrations per task, the ten-task model achieves 38.1% success across 1,000 test episodes, including 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
       </div>
       <div class="findings-content">
-        <article class="finding" aria-labelledby="finding-performance">
-          <h3 id="finding-performance">Performance is uneven across tasks</h3>
-          <p>With 45 training demos per task, success reaches <strong>95%</strong> on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on block return, but only <strong>38.1%</strong> overall. The model learns several manipulation sequences reliably from few demonstrations, while hidden-target selection (<strong>4%</strong>) and counting (<strong>3%</strong>) remain weak. High success on individual tasks does not establish reliable use of past cues across the benchmark.</p>
-        </article>
-        <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">At test time, memory content guides the return location</h3>
-          <p>Keeping the trained model and current observation fixed, we replaced its TTT memory with memory from another episode. In <strong>8/8</strong> block-return trials, the robot redirected the block toward the starting mat recorded in the replacement memory. This shows that, at test time, the policy uses the <strong>content of stored memory</strong> to choose a return location. The evidence is specific to this task and intervention.</p>
+        <article class="finding" aria-labelledby="finding-scaling">
+          <h3 id="finding-scaling">More training data improves success on several tasks, but not all</h3>
+          <p>With 200 demos/task (≈195 training), <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task (495 training), <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. Expanded training addresses some failures, while selecting the required uncovering order remains unresolved.</p>
+          <p>Comparisons use the same 20 validation seeds per task and 20k training updates. Task groups also shrink from 10 to 4 to 2, changing training exposure per task, so these gains cannot be attributed to data volume alone.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
-          <h3 id="finding-persistence">Retaining history helps when blocks must return to earlier locations</h3>
-          <p>In the 200-demo runs, TTT memory achieves <strong>20/20</strong> on <a href="#update-put_back_block">block return</a> and <strong>8/20</strong> on <a href="#update-place_block_mat">multiple-block return</a>, versus <strong>7/20</strong> and <strong>0/20</strong> for <strong>w/o persistent memory</strong>, which resets TTT state during both training and evaluation. <a href="#update-swap_blocks">Block swapping</a> is closer: <strong>17/20 vs. 15/20</strong>. The clearest benefits here are on tasks requiring a return to an earlier location; persistent memory does not improve every task equally.</p>
+          <h3 id="finding-persistence">Removing persistent memory lowers success in several comparisons</h3>
+          <p>In the 200-demo runs, <strong>w/o persistent memory during training and evaluation</strong> reduces <a href="#update-put_back_block">block-return success</a> from <strong>20/20 to 7/20</strong> and <a href="#update-place_block_mat">multiple-block return</a> from <strong>8/20 to 0/20</strong>. In the <a href="#controls">earlier reported 16-step block-ordering comparison</a>, clearing memory only at evaluation reduces the same 6k checkpoint from <strong>26/100 to 0/100</strong>. Retained state therefore contributes to success, and removing it at test time can disrupt a learned policy.</p>
+          <p>The effect is task dependent: the separately reset-trained ordering model reaches 30/100. These controls reset history across calls; updates and reads within each call remain active, so they do not isolate the effect of disabling TTT updates.</p>
         </article>
-        <article class="finding" aria-labelledby="finding-train-eval">
-          <h3 id="finding-train-eval">Clearing memory at test time can break a policy trained to use it</h3>
-          <p>In the <a href="#controls">earlier reported 16-step block-ordering comparison</a>, resetting the same 6k checkpoint only at evaluation drops success from <strong>26/100 to 0/100</strong>. A separate model trained and evaluated with resets reaches <strong>30/100</strong>. <strong>w/o persistent memory at evaluation only</strong> therefore tests the trained policy’s dependence on history; <strong>w/o persistent memory during training and evaluation</strong> tests a separately learned policy. The former can fail even when the latter succeeds.</p>
-          <p>These ablations test <strong>retention across calls</strong>. All TTT variants still update and read within each call, so they do not establish that disabling updates during either training or evaluation causes failure.</p>
+        <article class="finding" aria-labelledby="finding-cue-use">
+          <h3 id="finding-cue-use">Storing a target cue does not guarantee using it to choose an object</h3>
+          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, a separate probe decodes the displayed target from memory immediately after the cue with <strong>85% accuracy</strong> on held-out scenes. Yet swapping memories produced by different cues changes the chosen object in <strong>0/148</strong> held-out decision pairs at the first decision after hiding. Amplifying the memory branch also fails to improve cue following on validation scenes. These results point to a gap between encoding the cue and using it to select an action; they do not establish that TTT cannot store a brief observation.</p>
         </article>
-        <article class="finding" aria-labelledby="finding-scaling">
-          <h3 id="finding-scaling">Transfers improve with expanded training; ordered uncovering remains difficult</h3>
-          <p>With 200 demos/task (≈195 training), <a href="#panel-swap_blocks">block swapping</a> rises from <strong>6/20 to 17/20</strong> and <a href="#panel-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task (495 training), <a href="#panel-swap_T">T-block swapping</a> rises from <strong>2/20 to 16/20</strong>, while <a href="#panel-put_back_block">block return</a> reaches <strong>20/20</strong>. These gains suggest that more task-specific training can address some of the low-data failures.</p>
-          <p><a href="#panel-cover_blocks">Ordered uncovering</a> stays at <strong>1/20</strong> with 200 demos, despite successful covering in <strong>20/20</strong> episodes. This localizes the remaining difficulty to uncovering the blocks in the required color order: adding demonstrations has not yet resolved that stage.</p>
-          <p>Comparisons use the same 20 validation seeds per task and 20k training updates. Task groups also change from 10 to 4 to 2, so the gains cannot be attributed to data volume alone.</p>
+        <article class="finding" aria-labelledby="finding-memory">
+          <h3 id="finding-memory">Memory content can causally redirect the robot’s target choice</h3>
+          <p>In <a href="#panel-put_back_block">block return</a>, keeping the model and current observation fixed while replacing its memory redirects the robot toward the starting mat recorded in the replacement memory in <strong>8/8 trials</strong>. This provides direct evidence that stored episode information guides later target selection in this task. Across these experiments, effective use of memory is task dependent.</p>
         </article>
       </div>
     </section>
@@ -209,7 +204,15 @@
 <h3 id="task-observe_and_pickup" class="task-title">observe_and_pickup</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200003.jpg" aria-label="observe_and_pickup · Success · Validation · 200003"><source src="assets/videos/e32c32/observe_and_pickup/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200003</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200005.jpg" aria-label="observe_and_pickup · Failure · Validation · 200005"><source src="assets/videos/e32c32/observe_and_pickup/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200005</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-observe_and_pickup"><h4 id="analysis-observe_and_pickup">The target is a mouse; the policy lifts a stapler</h4><p>A mouse is shown at the start, then hidden behind a wall. The robot grasps and lifts the stapler about 7 cm from the mouse.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-observe_and_pickup">
+  <h4 id="analysis-observe_and_pickup">The target is a mouse; the policy lifts a stapler</h4>
+  <p>A mouse is shown at the start, then hidden behind a wall. The robot grasps and lifts the stapler about 7 cm from the mouse.</p>
+  <div class="task-data-update" aria-labelledby="update-observe_and_pickup">
+    <h4 id="update-observe_and_pickup">Cue information is decodable, but the tested choices do not follow it</h4>
+    <p>The reported cue diagnostic uses the evaluated ten-task B3 policy and 292 scenes, split by scene into 175 training, 43 validation, and 74 held-out test scenes. Target identity is decoded from memory immediately after the cue with <strong>85.0%</strong> held-out accuracy (95% CI: 81.9–87.9%), compared with 24.1% from the no-cue version.</p>
+    <p>At the first decision after hiding the target, holding the current image, robot state, position, and action noise fixed while swapping cue-conditioned memory changes the chosen object in <strong>0/148 held-out pairs</strong>. Scaling the memory branch’s output by ×2 or ×5 on the 43 validation scenes also fails the predefined cue-following improvement criteria; ×5 increases too-short reaches to 67.5%. No scaled setting advances to held-out testing. The evidence shows a gap between cue encoding and its use in the tested decisions; it does not determine a unique underlying cause.</p>
+  </div>
+</article>
 </div>
 <div id="panel-press_button" class="task-gallery-panel" aria-labelledby="task-press_button">
 <h3 id="task-press_button" class="task-title">press_button</h3>
