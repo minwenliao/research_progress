@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img"><title>Flex-π: A vs. B3 vs. C3</title><desc>A has no TTT. B3 carries fast weights across policy calls. C3 resets fast weights to their learned initialization while retaining each call’s update and read. Observer tokens are hidden from action attention in both B3 and C3.</desc>
+<defs><filter id="shadow" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="14" dy="18" stdDeviation="11" flood-color="#000" flood-opacity=".22"/></filter><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#666"/></marker></defs>
+<rect x="0" y="0" width="1920" height="1080" rx="0" fill="white" stroke="white" stroke-width="2"/>
+<rect x="55" y="32" width="1590" height="106" rx="22" fill="white" stroke="#909090" stroke-width="2" filter="url(#shadow)"/>
+<text x="85" y="101" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="49" font-weight="bold" fill="#222">
+<tspan x="85" dy="0">Flex-π: A vs. B3 vs. C3</tspan>
+</text>
+<rect x="60" y="185" width="560" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="340.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="340.0" dy="0">A · WITHOUT TTT</tspan>
+</text>
+<line x1="160" y1="255" x2="520" y2="255" stroke="#777" stroke-width="2"/>
+<text x="340.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="340.0" dy="0">No fast-memory module</tspan>
+</text>
+<rect x="135" y="325" width="410" height="58" rx="10" fill="#c5dfb8" stroke="#909090" stroke-width="2"/>
+<text x="340" y="362" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="340" dy="0">Camera observations</tspan>
+</text>
+<path d="M340,384 L340,410" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="135" y="412" width="410" height="80" rx="24" fill="#f8cfa3" stroke="#909090" stroke-width="2"/>
+<text x="340" y="444" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="340" dy="0">Video backbone</tspan>
+<tspan x="340" dy="31.72">frozen · VAE / DINO features</tspan>
+</text>
+<path d="M340,492 L340,520" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="105" y="523" width="470" height="290" rx="27" fill="#e9a0a1" stroke="#909090" stroke-width="2"/>
+<text x="340" y="560" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="31" font-weight="bold" fill="#222">
+<tspan x="340" dy="0">Action expert</tspan>
+</text>
+<rect x="135" y="580" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="340" y="612" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="340" dy="0">Attention + conditioning</tspan>
+</text>
+<path d="M340,630 L340,731" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="170" y="684" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="normal" fill="#744f4f">
+<tspan x="170" dy="0">No TTT</tspan>
+</text>
+<rect x="135" y="740" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="340" y="772" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="340" dy="0">FFN → action features</tspan>
+</text>
+<path d="M340,814 L340,839" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="205" y="842" width="270" height="48" rx="9" fill="#eeeeee" stroke="#909090" stroke-width="2"/>
+<text x="340" y="875" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="28" font-weight="normal" fill="#222">
+<tspan x="340" dy="0">Action chunk</tspan>
+</text>
+<text x="340" y="928" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="340" dy="0">No TTT state to carry</tspan>
+</text>
+<rect x="680" y="185" width="560" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="960.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="960.0" dy="0">B3 · PERSISTENT TTT</tspan>
+</text>
+<line x1="780" y1="255" x2="1140" y2="255" stroke="#777" stroke-width="2"/>
+<text x="960.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="960.0" dy="0">Carry fast weights across calls</tspan>
+</text>
+<rect x="755" y="325" width="410" height="58" rx="10" fill="#c5dfb8" stroke="#909090" stroke-width="2"/>
+<text x="960" y="362" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">Camera observations</tspan>
+</text>
+<path d="M960,384 L960,410" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="755" y="412" width="410" height="80" rx="24" fill="#f8cfa3" stroke="#909090" stroke-width="2"/>
+<text x="960" y="444" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">Video backbone</tspan>
+<tspan x="960" dy="31.72">frozen · VAE / DINO features</tspan>
+</text>
+<path d="M960,492 L960,520" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="725" y="523" width="470" height="290" rx="27" fill="#e9a0a1" stroke="#909090" stroke-width="2"/>
+<text x="960" y="560" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="31" font-weight="bold" fill="#222">
+<tspan x="960" dy="0">Action expert</tspan>
+</text>
+<rect x="755" y="580" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="960" y="612" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">Attention + conditioning</tspan>
+</text>
+<path d="M960,630 L960,652" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="755" y="655" width="410" height="64" rx="12" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="960" y="681" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">TTT: update → read</tspan>
+<tspan x="960" dy="30.5">carried W → W′</tspan>
+</text>
+<path d="M960,720 L960,737" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="755" y="740" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="960" y="772" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">FFN → action features</tspan>
+</text>
+<path d="M960,814 L960,839" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="825" y="842" width="270" height="48" rx="9" fill="#eeeeee" stroke="#909090" stroke-width="2"/>
+<text x="960" y="875" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="28" font-weight="normal" fill="#222">
+<tspan x="960" dy="0">Action chunk</tspan>
+</text>
+<text x="960" y="928" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#1767a9">
+<tspan x="960" dy="0">Commit W′ for a later call</tspan>
+</text>
+<rect x="1300" y="185" width="560" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="1580.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="1580.0" dy="0">C3 · RESET TTT</tspan>
+</text>
+<line x1="1400" y1="255" x2="1760" y2="255" stroke="#777" stroke-width="2"/>
+<text x="1580.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="1580.0" dy="0">Reset fast weights at every call</tspan>
+</text>
+<rect x="1375" y="325" width="410" height="58" rx="10" fill="#c5dfb8" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="362" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">Camera observations</tspan>
+</text>
+<path d="M1580,384 L1580,410" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1375" y="412" width="410" height="80" rx="24" fill="#f8cfa3" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="444" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">Video backbone</tspan>
+<tspan x="1580" dy="31.72">frozen · VAE / DINO features</tspan>
+</text>
+<path d="M1580,492 L1580,520" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1345" y="523" width="470" height="290" rx="27" fill="#e9a0a1" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="560" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="31" font-weight="bold" fill="#222">
+<tspan x="1580" dy="0">Action expert</tspan>
+</text>
+<rect x="1375" y="580" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="612" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">Attention + conditioning</tspan>
+</text>
+<path d="M1580,630 L1580,652" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1375" y="655" width="410" height="64" rx="12" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="681" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">TTT: update → read</tspan>
+<tspan x="1580" dy="30.5">W₀ → W′ within this call</tspan>
+</text>
+<path d="M1580,720 L1580,737" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1375" y="740" width="410" height="48" rx="10" fill="#f9eeee" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="772" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">FFN → action features</tspan>
+</text>
+<path d="M1580,814 L1580,839" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1445" y="842" width="270" height="48" rx="9" fill="#eeeeee" stroke="#909090" stroke-width="2"/>
+<text x="1580" y="875" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="28" font-weight="normal" fill="#222">
+<tspan x="1580" dy="0">Action chunk</tspan>
+</text>
+<text x="1580" y="928" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#1767a9">
+<tspan x="1580" dy="0">Next call starts from W₀ again</tspan>
+</text>
+<text x="960" y="1020" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="960" dy="0">B3 / C3: observers hidden from direct action attention. C3 resets during training and inference.</tspan>
+<tspan x="960" dy="33">Shared text / proprioception conditioning is simplified. Pointmap is off in these experiments.</tspan>
+</text>
+</svg>

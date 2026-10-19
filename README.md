@@ -1,2 +1,5 @@
-# research_progress
-Research progress: experiment results, model diagrams, and rollout videos.
+# Research progress
+
+[View the report](https://minwenliao.github.io/research_progress/)
+
+Experiment results, model diagrams, and rollout videos.

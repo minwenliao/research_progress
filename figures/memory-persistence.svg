@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img"><title>Flex-π: persistent memory vs. matched reset</title><desc>B3 and B4 retain committed fast weights. C3 and C4 reset fast weights during training and inference. B evaluated with reset is a separate intervention, not a C model.</desc>
+<defs><filter id="shadow" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="14" dy="18" stdDeviation="11" flood-color="#000" flood-opacity=".22"/></filter><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#666"/></marker></defs>
+<rect x="0" y="0" width="1920" height="1080" rx="0" fill="white" stroke="white" stroke-width="2"/>
+<rect x="55" y="32" width="1590" height="106" rx="22" fill="white" stroke="#909090" stroke-width="2" filter="url(#shadow)"/>
+<text x="85" y="101" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="49" font-weight="bold" fill="#222">
+<tspan x="85" dy="0">Flex-π: persistent memory vs. matched reset</tspan>
+</text>
+<rect x="75" y="185" width="820" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="485.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="485.0" dy="0">B3 / B4 · CARRY</tspan>
+</text>
+<line x1="175" y1="255" x2="795" y2="255" stroke="#777" stroke-width="2"/>
+<text x="485.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="485.0" dy="0">Across policy calls within an episode</tspan>
+</text>
+<text x="170" y="399" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="170" dy="0">Call 1</tspan>
+</text>
+<rect x="305" y="355" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="540" y="395" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="540" dy="0">W₀ → update → read</tspan>
+<tspan x="540" dy="36.6">candidate W1</tspan>
+</text>
+<path d="M540,465 L540,512" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="580" y="498" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#1767a9">
+<tspan x="580" dy="0">commit / carry</tspan>
+</text>
+<text x="170" y="564" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="170" dy="0">Call 2</tspan>
+</text>
+<rect x="305" y="520" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="540" y="560" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="540" dy="0">W1 → update → read</tspan>
+<tspan x="540" dy="36.6">candidate W2</tspan>
+</text>
+<path d="M540,630 L540,677" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="580" y="663" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#1767a9">
+<tspan x="580" dy="0">commit / carry</tspan>
+</text>
+<text x="170" y="729" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="170" dy="0">Call 3</tspan>
+</text>
+<rect x="305" y="685" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="540" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="540" dy="0">W2 → update → read</tspan>
+<tspan x="540" dy="36.6">candidate W3</tspan>
+</text>
+<text x="485" y="850" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="485" dy="0">Persist only at scheduled commits</tspan>
+<tspan x="485" dy="32.94">Reset to W₀ at the episode boundary</tspan>
+</text>
+<rect x="1025" y="185" width="820" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="1435.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="1435.0" dy="0">C3 / C4 · RESET</tspan>
+</text>
+<line x1="1125" y1="255" x2="1745" y2="255" stroke="#777" stroke-width="2"/>
+<text x="1435.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="1435.0" dy="0">Across policy calls within an episode</tspan>
+</text>
+<text x="1120" y="399" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="1120" dy="0">Call 1</tspan>
+</text>
+<rect x="1255" y="355" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="1490" y="395" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="1490" dy="0">W₀ → update → read</tspan>
+<tspan x="1490" dy="36.6">candidate W1</tspan>
+</text>
+<path d="M1490,465 L1490,512" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="9 7"/>
+<text x="1600" y="498" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#9c5b5b">
+<tspan x="1600" dy="0">reset to W₀</tspan>
+</text>
+<text x="1120" y="564" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="1120" dy="0">Call 2</tspan>
+</text>
+<rect x="1255" y="520" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="1490" y="560" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="1490" dy="0">W₀ → update → read</tspan>
+<tspan x="1490" dy="36.6">candidate W2</tspan>
+</text>
+<path d="M1490,630 L1490,677" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="9 7"/>
+<text x="1600" y="663" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#9c5b5b">
+<tspan x="1600" dy="0">reset to W₀</tspan>
+</text>
+<text x="1120" y="729" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="1120" dy="0">Call 3</tspan>
+</text>
+<rect x="1255" y="685" width="470" height="105" rx="22" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="1490" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="30" font-weight="normal" fill="#222">
+<tspan x="1490" dy="0">W₀ → update → read</tspan>
+<tspan x="1490" dy="36.6">candidate W3</tspan>
+</text>
+<text x="1435" y="850" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#555">
+<tspan x="1435" dy="0">Fresh W₀ at each call / training row</tspan>
+<tspan x="1435" dy="32.94">Current-call update and read still active</tspan>
+</text>
+<text x="960" y="1020" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="960" dy="0">C3 / C4 are trained with reset. B@reset reuses B weights and changes memory only during evaluation.</tspan>
+<tspan x="960" dy="33">Reset affects fast weights; position counters still advance. Non-commit calls are omitted here.</tspan>
+</text>
+</svg>

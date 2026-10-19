@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img"><title>Flex-π: B3 / C3 vs. B4 / C4</title><desc>The 3 versus 4 distinction changes direct attention from action tokens to observer tokens. All four variants allow observer writes and action queries through TTT. B carries state; C resets it.</desc>
+<defs><filter id="shadow" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="14" dy="18" stdDeviation="11" flood-color="#000" flood-opacity=".22"/></filter><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#666"/></marker></defs>
+<rect x="0" y="0" width="1920" height="1080" rx="0" fill="white" stroke="white" stroke-width="2"/>
+<rect x="55" y="32" width="1590" height="106" rx="22" fill="white" stroke="#909090" stroke-width="2" filter="url(#shadow)"/>
+<text x="85" y="101" text-anchor="start" font-family="Georgia, Times New Roman, serif" font-size="49" font-weight="bold" fill="#222">
+<tspan x="85" dy="0">Flex-π: B3 / C3 vs. B4 / C4</tspan>
+</text>
+<rect x="75" y="185" width="820" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="485.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="485.0" dy="0">B3 / C3 · OBSERVERS HIDDEN</tspan>
+</text>
+<line x1="175" y1="255" x2="795" y2="255" stroke="#777" stroke-width="2"/>
+<text x="485.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="485.0" dy="0">What can action tokens attend to?</tspan>
+</text>
+<rect x="150" y="333" width="670" height="90" rx="22" fill="#f8cfa3" stroke="#909090" stroke-width="2"/>
+<text x="485" y="371" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="29" font-weight="normal" fill="#222">
+<tspan x="485" dy="0">Video features + task / state conditioning</tspan>
+<tspan x="485" dy="35.38">shared inputs</tspan>
+</text>
+<path d="M270,425 L270,480" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M700,425 L700,480" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="150" y="483" width="245" height="88" rx="14" fill="#c5dfb8" stroke="#909090" stroke-width="2"/>
+<text x="272" y="519" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="272" dy="0">Observer tokens</tspan>
+<tspan x="272" dy="31.72">16 registers + state</tspan>
+</text>
+<rect x="575" y="483" width="245" height="88" rx="14" fill="#f5c6c7" stroke="#909090" stroke-width="2"/>
+<text x="697" y="519" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="697" dy="0">Action tokens</tspan>
+<tspan x="697" dy="31.72">denoising features</tspan>
+</text>
+<line x1="397" y1="522" x2="572" y2="522" stroke="#a3a3a3" stroke-width="3" stroke-dasharray="8 7"/>
+<path d="M472,510 l24,24 M496,510 l-24,24" stroke="#ab6868" stroke-width="4"/>
+<text x="484" y="496" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="normal" fill="#8c5555">
+<tspan x="484" dy="0">masked</tspan>
+</text>
+<rect x="150" y="629" width="670" height="200" rx="30" fill="#e9a0a1" stroke="#909090" stroke-width="2"/>
+<text x="485" y="816" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="bold" fill="#222">
+<tspan x="485" dy="0">TTT inside the action expert</tspan>
+</text>
+<rect x="180" y="686" width="310" height="103" rx="17" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="335" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="29" font-weight="normal" fill="#222">
+<tspan x="335" dy="0">Fast weights W</tspan>
+<tspan x="335" dy="35.38">update, then read</tspan>
+</text>
+<rect x="565" y="686" width="225" height="103" rx="13" fill="#f7d7d7" stroke="#909090" stroke-width="2"/>
+<text x="677" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="677" dy="0">Action query</tspan>
+<tspan x="677" dy="32.94">TTT readout</tspan>
+</text>
+<path d="M272,572 L272,620 L335,620 L335,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M697,572 L697,602 L445,602 L445,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="515" y="597" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#555">
+<tspan x="515" dy="0">write</tspan>
+</text>
+<path d="M697,572 L697,645 L677,645 L677,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M563,722 L495,722" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="529" y="709" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#222">
+<tspan x="529" dy="0">Q</tspan>
+</text>
+<path d="M493,764 L563,764" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="529" y="795" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#222">
+<tspan x="529" dy="0">read</tspan>
+</text>
+<path d="M677,831 L677,857" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="527" y="860" width="300" height="49" rx="10" fill="#eeeeee" stroke="#909090" stroke-width="2"/>
+<text x="677" y="893" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="677" dy="0">Action chunk</tspan>
+</text>
+<text x="299" y="879" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="normal" fill="#1767a9">
+<tspan x="299" dy="0">B: carry W across calls</tspan>
+<tspan x="299" dy="29.28">C: reset W each call</tspan>
+</text>
+<rect x="1025" y="185" width="820" height="775" rx="65" fill="white" stroke="#b9b9b9" stroke-width="2" filter="url(#shadow)"/>
+<text x="1435.0" y="242" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#555">
+<tspan x="1435.0" dy="0">B4 / C4 · OBSERVERS VISIBLE</tspan>
+</text>
+<line x1="1125" y1="255" x2="1745" y2="255" stroke="#777" stroke-width="2"/>
+<text x="1435.0" y="294" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="1435.0" dy="0">What can action tokens attend to?</tspan>
+</text>
+<rect x="1100" y="333" width="670" height="90" rx="22" fill="#f8cfa3" stroke="#909090" stroke-width="2"/>
+<text x="1435" y="371" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="29" font-weight="normal" fill="#222">
+<tspan x="1435" dy="0">Video features + task / state conditioning</tspan>
+<tspan x="1435" dy="35.38">shared inputs</tspan>
+</text>
+<path d="M1220,425 L1220,480" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M1650,425 L1650,480" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1100" y="483" width="245" height="88" rx="14" fill="#c5dfb8" stroke="#909090" stroke-width="2"/>
+<text x="1222" y="519" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="1222" dy="0">Observer tokens</tspan>
+<tspan x="1222" dy="31.72">16 registers + state</tspan>
+</text>
+<rect x="1525" y="483" width="245" height="88" rx="14" fill="#f5c6c7" stroke="#909090" stroke-width="2"/>
+<text x="1647" y="519" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="normal" fill="#222">
+<tspan x="1647" dy="0">Action tokens</tspan>
+<tspan x="1647" dy="31.72">denoising features</tspan>
+</text>
+<path d="M1347,522 L1522,522" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="1434" y="496" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="normal" fill="#4a6d3c">
+<tspan x="1434" dy="0">attend</tspan>
+</text>
+<rect x="1100" y="629" width="670" height="200" rx="30" fill="#e9a0a1" stroke="#909090" stroke-width="2"/>
+<text x="1435" y="816" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="25" font-weight="bold" fill="#222">
+<tspan x="1435" dy="0">TTT inside the action expert</tspan>
+</text>
+<rect x="1130" y="686" width="310" height="103" rx="17" fill="#bfd8f4" stroke="#909090" stroke-width="2"/>
+<text x="1285" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="29" font-weight="normal" fill="#222">
+<tspan x="1285" dy="0">Fast weights W</tspan>
+<tspan x="1285" dy="35.38">update, then read</tspan>
+</text>
+<rect x="1515" y="686" width="225" height="103" rx="13" fill="#f7d7d7" stroke="#909090" stroke-width="2"/>
+<text x="1627" y="725" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="1627" dy="0">Action query</tspan>
+<tspan x="1627" dy="32.94">TTT readout</tspan>
+</text>
+<path d="M1222,572 L1222,620 L1285,620 L1285,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M1647,572 L1647,602 L1395,602 L1395,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="1465" y="597" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#555">
+<tspan x="1465" dy="0">write</tspan>
+</text>
+<path d="M1647,572 L1647,645 L1627,645 L1627,682" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M1513,722 L1445,722" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="1479" y="709" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#222">
+<tspan x="1479" dy="0">Q</tspan>
+</text>
+<path d="M1443,764 L1513,764" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="1479" y="795" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="22" font-weight="normal" fill="#222">
+<tspan x="1479" dy="0">read</tspan>
+</text>
+<path d="M1627,831 L1627,857" fill="none" stroke="#666" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1477" y="860" width="300" height="49" rx="10" fill="#eeeeee" stroke="#909090" stroke-width="2"/>
+<text x="1627" y="893" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="27" font-weight="normal" fill="#222">
+<tspan x="1627" dy="0">Action chunk</tspan>
+</text>
+<text x="1249" y="879" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="normal" fill="#1767a9">
+<tspan x="1249" dy="0">B: carry W across calls</tspan>
+<tspan x="1249" dy="29.28">C: reset W each call</tspan>
+</text>
+<text x="960" y="1020" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="normal" fill="#555">
+<tspan x="960" dy="0">The added route in B4 / C4 is direct observer → action attention; TTT read / write remains in all four.</tspan>
+<tspan x="960" dy="33">All tokens read the updated fast weights; observer readouts are omitted for clarity.</tspan>
+</text>
+</svg>
