@@ -83,6 +83,17 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .results-table tbody tr:last-child th, .results-table tbody tr:last-child td { border-bottom: 0; }
 .results-table .task-link { text-decoration: none; }
 .results-table .task-link:hover { text-decoration: underline; }
+.data-comparison { table-layout: fixed; }
+.data-comparison th:first-child { width: 50%; }
+.data-comparison td { width: 25%; vertical-align: middle; }
+.data-comparison td strong { font-size: 23px; }
+.result-setting, .result-count { display: block; margin-top: 5px; color: var(--muted); font-size: 16px; font-weight: 400; }
+.result-unavailable { color: var(--muted); }
+.results-context { margin-top: 22px; max-width: 980px; color: var(--muted); }
+.test-results { margin-top: 28px; border-top: 1px solid var(--rule); padding-top: 22px; }
+.test-results summary { cursor: pointer; font-weight: 600; }
+.test-results > p { margin-top: 18px; max-width: 980px; }
+.test-results .table-wrap { margin-top: 22px; }
 .task-description { display: block; max-width: 590px; margin-top: 5px; color: var(--muted); font-size: 17px; line-height: 1.4; }
 .arm-table { margin-top: 26px; }
 .arm-table th:first-child { width: 10%; }
@@ -182,6 +193,10 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
   .results-table th:first-child { width: 50%; overflow-wrap: anywhere; }
   .results-table td { width: 25%; white-space: nowrap; }
   .results-table thead th { font-size: 15px; }
+  .data-comparison th:first-child { width: 44%; }
+  .data-comparison td { width: 28%; }
+  .data-comparison td strong { font-size: 20px; }
+  .result-setting, .result-count { font-size: 15px; }
   .figure-tabs { column-gap: 22px; margin-top: 20px; }
   .figure-tabs button { font-size: 16px; }
   .figure-panel figcaption { font-size: 16px; }
