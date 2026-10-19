@@ -134,6 +134,8 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .task-analysis h4 { margin-bottom: 8px; }
 .task-analysis p { color: #444; font-size: 18px; line-height: 1.5; }
 .cover-analysis p + p { margin-top: 14px; }
+.task-data-update { margin-top: 26px; }
+.task-data-update .task-stage-comparison { margin-top: 16px; }
 .task-stage-comparison { margin: 22px 0 18px; }
 .task-stage-comparison table { table-layout: fixed; }
 .task-stage-comparison caption { font-size: 18px; }

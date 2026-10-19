@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT research progress: manipulation with 45 training demonstrations per task, memory interventions, and limitations in using brief target cues.">
   <title>Flex-π + TTT experiments — 18 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261018-cover-analysis">
+  <link rel="stylesheet" href="style.css?v=20261018-200-demo-updates">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
@@ -42,7 +42,7 @@
         </article>
         <article class="finding" aria-labelledby="finding-limitations">
           <h3 id="finding-limitations">Object selection, counting, and repeated transfers remain difficult</h3>
-          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. In the failures examined, the robot selects the wrong object, misses a grasp, places an object at the wrong angle, or presses a button too many times. Limited demonstration coverage may contribute to these errors, but whether more data helps has not yet been tested.</p>
+          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. In the failures examined, the robot selects the wrong object, misses a grasp, places an object at the wrong angle, or presses a button too many times. Separate four-task runs with more demonstrations improve validation performance on block return, block swapping, and repeated transfers; the results appear below each task’s videos.</p>
           <p>In the object-selection episodes examined, changing the initially displayed target did not change the object chosen, even at the first decision after the target was hidden. We do not yet know whether the model fails to store the target’s identity or fails to use that information when choosing an object.</p>
         </article>
       </div>
@@ -65,7 +65,7 @@
     </section>
 
 <section id="case-explorer" class="slide" aria-labelledby="cases-title">
-      <div class="section-heading"><h2 id="cases-title">Task rollouts</h2><p>A success and a failure from each task.</p></div>
+      <div class="section-heading"><h2 id="cases-title">Task rollouts</h2><p>Successes and failures from the original ten-task B3 model. The 200-demo updates below report separate four-task runs: both the data volume and task mix changed, so the comparisons do not isolate the effect of adding demonstrations.</p></div>
       <nav class="task-index" aria-label="Jump to a task">
 <a href="#panel-rearrange_blocks">rearrange_blocks</a>
 <a href="#panel-blocks_ranking_try">blocks_ranking_try</a>
@@ -94,13 +94,47 @@
 <h3 id="task-put_back_block" class="task-title">put_back_block</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200000.jpg" aria-label="put_back_block · Success · Validation · 200000"><source src="assets/videos/e32c32/put_back_block/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200001.jpg" aria-label="put_back_block · Failure · Validation · 200001"><source src="assets/videos/e32c32/put_back_block/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200001</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-put_back_block"><h4 id="analysis-put_back_block">The robot presses the button too early</h4><p>The robot presses the button before centering the block. It reaches the 500-step limit without finishing.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-put_back_block">
+  <h4 id="analysis-put_back_block">The robot presses the button too early</h4>
+  <p>The robot presses the button before centering the block. It reaches the 500-step limit without finishing.</p>
+  <div class="task-data-update" aria-labelledby="update-put_back_block">
+    <h4 id="update-put_back_block">200-demo validation: B3 succeeds in 20/20 episodes</h4>
+    <div class="table-wrap task-stage-comparison">
+      <table>
+        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">B3 · memory kept</th><td>16/20</td><td><strong>20/20</strong></td></tr>
+          <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>7/20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>In the four-task run, B3 succeeds on all 20 validation seeds, while C3 succeeds on seven. The remaining 13 seeds are successes for B3 only, supporting a benefit from retaining memory in this run.</p>
+  </div>
+</article>
 </div>
 <div id="panel-swap_blocks" class="task-gallery-panel" aria-labelledby="task-swap_blocks">
 <h3 id="task-swap_blocks" class="task-title">swap_blocks</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200040.jpg" aria-label="swap_blocks · Success · Validation · 200040"><source src="assets/videos/e32c32/swap_blocks/seed200040.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200040</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200000.jpg" aria-label="swap_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/swap_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-swap_blocks"><h4 id="analysis-swap_blocks">Two transfers work; the third grasp misses</h4><p>The third grasp misses by 2.1 cm. The gripper pushes the block’s edge and lifts empty, then moves to the destination tray, opens, and presses the button.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-swap_blocks">
+  <h4 id="analysis-swap_blocks">Two transfers work; the third grasp misses</h4>
+  <p>The third grasp misses by 2.1 cm. The gripper pushes the block’s edge and lifts empty, then moves to the destination tray, opens, and presses the button.</p>
+  <div class="task-data-update" aria-labelledby="update-swap_blocks">
+    <h4 id="update-swap_blocks">200-demo validation: B3 succeeds in 17/20 episodes</h4>
+    <div class="table-wrap task-stage-comparison">
+      <table>
+        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">B3 · memory kept</th><td>6/20</td><td><strong>17/20</strong></td></tr>
+          <tr><th scope="row">C3 · reset each call</th><td>8/20</td><td>15/20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Both models improve substantially, including C3, which resets memory at every call. In the four-task run, B3 leads C3 by two successful episodes; this small validation sample does not establish a clear advantage from retaining memory.</p>
+  </div>
+</article>
 </div>
 <div id="panel-battery_try" class="task-gallery-panel" aria-labelledby="task-battery_try">
 <h3 id="task-battery_try" class="task-title">battery_try</h3>
@@ -152,7 +186,24 @@
 <h3 id="task-place_block_mat" class="task-title">place_block_mat</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Test</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed100042.jpg" aria-label="place_block_mat · Success · Test · 100042"><source src="assets/videos/e32c32/place_block_mat/seed100042.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 100042</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed200002.jpg" aria-label="place_block_mat · Failure · Validation · 200002"><source src="assets/videos/e32c32/place_block_mat/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-place_block_mat"><h4 id="analysis-place_block_mat">The first grasp closes over an empty mat</h4><p>At step 60, the gripper closes over an empty mat, 9.5 cm from the leftmost block, without touching it. It then lifts, moves to the green mat, opens, and returns without carrying the block.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-place_block_mat">
+  <h4 id="analysis-place_block_mat">The first grasp closes over an empty mat</h4>
+  <p>At step 60, the gripper closes over an empty mat, 9.5 cm from the leftmost block, without touching it. It then lifts, moves to the green mat, opens, and returns without carrying the block.</p>
+  <div class="task-data-update" aria-labelledby="update-place_block_mat">
+    <h4 id="update-place_block_mat">200-demo validation: B3 succeeds in 8/20 episodes</h4>
+    <div class="table-wrap task-stage-comparison">
+      <table>
+        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">B3 · memory kept</th><td>0/20</td><td><strong>8/20</strong></td></tr>
+          <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>0/20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The four-task B3 solves eight validation episodes that neither ten-task model completed. C3 remains at 0/20 in the four-task setting. This result supports a benefit from retaining memory in this validation run.</p>
+  </div>
+</article>
 </div>
     </section>
 
@@ -165,7 +216,7 @@
     </section>
 
 <section id="architectures" class="slide" aria-labelledby="architectures-title">
-      
+
 <div class="section-heading"><h2 id="architectures-title">A, B3/B4, and C3/C4</h2><p>A has no TTT. B retains fast weights across calls; C resets them. Action tokens can attend directly to observer tokens in B4/C4, but not in B3/C3.</p></div>
       <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
       <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
@@ -223,7 +274,7 @@
               <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
               <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
               <div><dt>Training</dt><dd>20,000 updates each</dd></div>
-              <div><dt>Evaluation</dt><dd>Validation complete; <a href="#analysis-cover_blocks">cover_blocks analysis above</a></dd></div>
+              <div><dt>Evaluation</dt><dd>Validation complete; <a href="#update-put_back_block">per-task updates above</a></dd></div>
             </dl>
           </div>
         </article>
