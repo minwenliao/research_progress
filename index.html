@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Flex-π + TTT research progress: task success with 45, approximately 195, and 495 training demonstrations per task, and memory interventions.">
+  <meta name="description" content="Flex-π + TTT research progress: task success with 50, 200, and 500 demonstrations per task, and memory interventions.">
   <title>Flex-π + TTT experiments — 19 Oct 2026 — Minwen Liao</title>
   <link rel="stylesheet" href="style.css?v=20261019-model-labels">
   <script src="app.js?v=20261018-report" defer></script>
@@ -34,7 +34,7 @@
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-scaling">
           <h3 id="finding-scaling">More training data improves success on several tasks, but not all</h3>
-          <p>With 200 demos/task (≈195 training), <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task (495 training), <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. More data helps several manipulation tasks, while choosing the required uncovering order remains difficult.</p>
+          <p>With 200 demos/task, <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. More data helps several manipulation tasks, while choosing the required uncovering order remains difficult.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
           <h3 id="finding-persistence">Retaining history helps some tasks; clearing it at test time can disrupt a learned policy</h3>
@@ -54,12 +54,12 @@
 <section id="results" class="slide" aria-labelledby="results-title">
       <div class="section-heading">
         <h2 id="results-title">RMBench results</h2>
-        <p>Persistent TTT memory (B3), across three training-set sizes. The 45-demo column reports test results; the larger-data runs report validation results.</p>
+        <p>Persistent TTT memory (B3), across three training-set sizes. The 50-demo column reports test results; the larger-data runs report validation results.</p>
       </div>
       <p class="results-scroll-hint">Scroll horizontally to view all training sets.</p>
       <div class="table-wrap results-scroll" tabindex="0" role="region" aria-label="B3 results across training sets"><table class="results-table data-comparison">
-        <caption class="sr-only">B3 success by task: test results out of 100 episodes for the ten-task model with 45 training demonstrations per task; validation results out of 20 episodes for the four-task model with approximately 195 training demonstrations per task and the two-task model with 495.</caption>
-        <thead><tr><th scope="col">Task</th><th scope="col">45 training demos<span class="result-setting">50-demo set · 10 tasks<br>Test · 100 episodes</span></th><th scope="col">≈195 training demos<span class="result-setting">200-demo set · 4 tasks<br>Validation · 20 episodes</span></th><th scope="col">495 training demos<span class="result-setting">500-demo set · 2 tasks<br>Validation · 20 episodes</span></th></tr></thead>
+        <caption class="sr-only">B3 success by task: test results out of 100 episodes for the ten-task model with 50 demos per task; validation results out of 20 episodes for the four-task model with 200 demos per task and the two-task model with 500. Each dataset holds out five demos per task.</caption>
+        <thead><tr><th scope="col">Task</th><th scope="col">50 demos<span class="result-setting">45 train · 10 tasks<br>Test · 100 episodes</span></th><th scope="col">200 demos<span class="result-setting">195 train · 4 tasks<br>Validation · 20 episodes</span></th><th scope="col">500 demos<span class="result-setting">495 train · 2 tasks<br>Validation · 20 episodes</span></th></tr></thead>
         <tbody id="results-body">
 <tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td><strong>95%</strong><span class="result-count">95 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td><strong>94%</strong><span class="result-count">94 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
@@ -73,7 +73,7 @@
 <tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td><strong>2%</strong><span class="result-count">2 / 100</span></td><td><strong>40%</strong><span class="result-count">8 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
         </tbody>
       </table></div>
-      <p class="results-context">Demo counts and evaluation episode counts are per task, with five demonstrations held out per task. All models trained for 20,000 updates and use 32-step execution. The 45-demo column reports test results; the other two report validation results. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means the task was not included in that training run.</p>
+      <p class="results-context">Demo counts are per task: 50, 200, and 500 demos correspond to 45, 195, and 495 training demos, with five held out in each setting. Evaluation episode counts are also per task. All models trained for 20,000 updates and use 32-step execution. The 50-demo column reports test results; the other two report validation results. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means the task was not included in that training run.</p>
       <details class="test-results">
         <summary>Original ten-task results · 38.1% test success</summary>
         <p>B3 with 45 training demonstrations per task: <strong>381 / 1,000</strong> test successes. Validation and test episodes are separate simulation runs, not the held-out expert demonstrations.</p>
@@ -130,7 +130,7 @@
     <div class="table-wrap task-stage-comparison">
       <table>
         <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
-        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
           <tr><th scope="row">B3 · memory kept</th><td>16/20</td><td><strong>20/20</strong></td></tr>
           <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>7/20</td></tr>
@@ -153,7 +153,7 @@
     <div class="table-wrap task-stage-comparison">
       <table>
         <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
-        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
           <tr><th scope="row">B3 · memory kept</th><td>6/20</td><td><strong>17/20</strong></td></tr>
           <tr><th scope="row">C3 · reset each call</th><td>8/20</td><td>15/20</td></tr>
@@ -187,7 +187,7 @@
   <div class="table-wrap task-stage-comparison">
     <table>
       <caption>Same 20 validation seeds</caption>
-      <thead><tr><th scope="col">Outcome</th><th scope="col">10-task B3<br>45 training demos/task</th><th scope="col">4-task B3<br>≈195 training demos/task</th></tr></thead>
+      <thead><tr><th scope="col">Outcome</th><th scope="col">10-task B3<br>50 demos/task</th><th scope="col">4-task B3<br>200 demos/task</th></tr></thead>
       <tbody>
         <tr><th scope="row">All three blocks covered</th><td>20/20</td><td>20/20</td></tr>
         <tr><th scope="row">Correct first lid</th><td>7/20</td><td>7/20</td></tr>
@@ -230,7 +230,7 @@
     <div class="table-wrap task-stage-comparison">
       <table>
         <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
-        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>45 training demos/task</th><th scope="col">4-task run<br>≈195 training demos/task</th></tr></thead>
+        <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
           <tr><th scope="row">B3 · memory kept</th><td>0/20</td><td><strong>8/20</strong></td></tr>
           <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>0/20</td></tr>
