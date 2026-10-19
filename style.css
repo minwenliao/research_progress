@@ -96,8 +96,9 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .test-results > p { margin-top: 18px; max-width: 980px; }
 .test-results .table-wrap { margin-top: 22px; }
 .task-description { display: block; max-width: 590px; margin-top: 5px; color: var(--muted); font-size: 17px; line-height: 1.4; }
-.arm-table { margin-top: 26px; }
-.arm-table th:first-child { width: 10%; }
+.arm-table { margin-top: 26px; table-layout: fixed; }
+.arm-table th:first-child { width: 34%; }
+.variant-id { display: block; margin-top: 4px; color: var(--muted); font-size: 15px; font-weight: 400; }
 .controls-table { min-width: 700px; }
 .controls-table th:first-child { width: 28%; }
 .controls-table td:nth-child(2) { width: 31%; }

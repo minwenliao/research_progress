@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT research progress: task success with 45, approximately 195, and 495 training demonstrations per task, and memory interventions.">
   <title>Flex-π + TTT experiments — 19 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261019-500-demo">
+  <link rel="stylesheet" href="style.css?v=20261019-model-labels">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
@@ -29,22 +29,22 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>We study whether test-time training (TTT) memory helps the Flex-π robot policy use earlier observations when acting—for example, to return an object to its initial location or select a target after it becomes hidden. The memory is updated as the robot acts and retained until the episode ends.</p>
+        <p>We add test-time training (TTT) memory to Flex-π to test whether earlier observations guide later actions.</p>
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-performance">
-          <h3 id="finding-performance">High success on several tasks with 45 training demonstrations per task</h3>
-          <p>Starting from pretrained Flex-π, we use 50 demonstrations per task: 45 for training and five held out. Our ten-task model with persistent memory (B3) achieves <strong>95%</strong> success on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on returning a block to its original mat. Overall success is <strong>38.1%</strong> across 1,000 test episodes.</p>
+          <h3 id="finding-performance">45 training demos per task</h3>
+          <p>The ten-task model with persistent TTT memory achieves <strong>95%</strong> on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on block return. Overall test success is <strong>38.1% (381/1,000)</strong>.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">Memory content influences which mat the robot chooses</h3>
-          <p>The block-return task requires the robot to move a block away and then return it to its original mat. In an earlier experiment, we replaced the robot’s memory with memory from another episode, where the block had started on a different mat. In all eight memory-swap trials, the robot carried the block toward that other episode’s starting mat. This intervention shows that stored episode information influences target selection in this task.</p>
+          <h3 id="finding-memory">Swapping memory redirects the robot</h3>
+          <p>In <strong>8/8</strong> block-return trials, replacing memory with another episode’s memory made the robot carry the block toward that episode’s starting mat.</p>
         </article>
         <article class="finding" aria-labelledby="finding-scaling">
-          <h3 id="finding-scaling">Larger-data runs improve validation success on several tasks</h3>
-          <p>With 200 demonstrations per task (approximately 195 for training), the four-task B3 model improves <a href="#panel-swap_blocks">block swapping</a> from <strong>6/20 to 17/20</strong>, <a href="#panel-place_block_mat">moving and returning multiple blocks</a> from <strong>0/20 to 8/20</strong>, and <a href="#panel-put_back_block">block return</a> from <strong>16/20 to 20/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> remains at <strong>1/20</strong>.</p>
-          <p>With 500 demonstrations per task (495 for training), the two-task B3 model improves <a href="#panel-swap_T">T-block swapping</a> from <strong>2/20 to 16/20</strong> and reaches <strong>20/20</strong> on block return, matching the 200-demo result.</p>
-          <p>These comparisons use the same 20 validation seeds per task, with the original ten-task, 45-training-demo B3 model as the baseline. All runs train for 20,000 updates, but the task mix and training exposure per task also change, so the gains cannot be attributed to data volume alone. The original 100-episode test results are reported separately below.</p>
+          <h3 id="finding-scaling">Larger-data validation results</h3>
+          <p><strong>200 demos/task (≈195 training):</strong> <a href="#panel-swap_blocks">block swapping</a> <strong>6/20→17/20</strong>, <a href="#panel-place_block_mat">multiple-block return</a> <strong>0/20→8/20</strong>, and <a href="#panel-put_back_block">block return</a> <strong>16/20→20/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> stays at <strong>1/20</strong>.</p>
+          <p><strong>500 demos/task (495 training):</strong> <a href="#panel-swap_T">T-block swapping</a> <strong>2/20→16/20</strong>; block return <strong>20/20</strong>.</p>
+          <p>Compared with the 45-demo model on the same 20 validation seeds per task. All runs use 20k updates, but task groups change from 10 to 4 to 2, so data volume is not the only difference.</p>
         </article>
       </div>
     </section>
@@ -52,7 +52,7 @@
 <section id="results" class="slide" aria-labelledby="results-title">
       <div class="section-heading">
         <h2 id="results-title">RMBench results</h2>
-        <p>With 495 training demonstrations per task, the two-task B3 model achieves <strong>80% (16/20)</strong> validation success on <a href="#panel-swap_T">T-block swapping</a> and <strong>100% (20/20)</strong> on <a href="#panel-put_back_block">block return</a>. On the same validation seeds, the original ten-task model scored 2/20 and 16/20, respectively. Test results for the new model are pending.</p>
+        <p>Persistent TTT memory (B3), across three training-set sizes. The 45-demo column reports test results; the larger-data runs report validation results.</p>
       </div>
       <p class="results-scroll-hint">Scroll horizontally to view all training sets.</p>
       <div class="table-wrap results-scroll" tabindex="0" role="region" aria-label="B3 results across training sets"><table class="results-table data-comparison">
@@ -243,7 +243,7 @@
 
 <section id="architectures" class="slide" aria-labelledby="architectures-title">
 
-<div class="section-heading"><h2 id="architectures-title">A, B3/B4, and C3/C4</h2><p>A has no TTT. B retains fast weights across calls; C resets them. Action tokens can attend directly to observer tokens in B4/C4, but not in B3/C3.</p></div>
+<div class="section-heading"><h2 id="architectures-title">Model variants</h2><p>We vary TTT, memory persistence, and direct observer-to-action attention. Run IDs in parentheses match the diagrams.</p></div>
       <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
       <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
         <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations.</figcaption></figure>
@@ -258,20 +258,20 @@
         <figure><a class="diagram-open" href="figures/memory-persistence.svg" target="_blank" rel="noopener" aria-label="Open Carry vs. reset diagram at full size"><img src="figures/memory-persistence.svg" width="1920" height="1080" alt="B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference."></a><figcaption>B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference.</figcaption></figure>
       </div>
 
-      <div class="table-wrap"><table class="arm-table"><caption>Model settings</caption><thead>
-<tr><th>Arm</th><th>TTT block</th><th>Fast weights across calls</th><th>Direct observer → action attention</th></tr></thead><tbody>
+      <div class="table-wrap"><table class="arm-table"><caption>Variants relative to TTT memory (B3)</caption><thead>
+<tr><th scope="col">Variant</th><th scope="col">TTT block</th><th scope="col">Memory across calls</th><th scope="col">Direct observer attention</th></tr></thead><tbody>
         
-<tr><th>A</th><td>Absent</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><th scope="row">w/o TTT <span class="variant-id">(A)</span></th><td>Absent</td><td>—</td><td>—</td></tr>
         
-<tr><th>B3</th><td>Update + read</td><td>Persist within episode</td><td>Masked</td></tr>
+<tr><th scope="row">TTT memory <span class="variant-id">(B3 · reference)</span></th><td>Update + read</td><td>Retained within episode</td><td>Masked</td></tr>
         
-<tr><th>B4</th><td>Update + read</td><td>Persist within episode</td><td>Allowed</td></tr>
+<tr><th scope="row">w/ direct observer attention <span class="variant-id">(B4)</span></th><td>Update + read</td><td>Retained within episode</td><td>Allowed</td></tr>
         
-<tr><th>C3</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Masked</td></tr>
+<tr><th scope="row">w/o persistent memory <span class="variant-id">(C3)</span></th><td>Update + read</td><td>Reset each call in training &amp; inference</td><td>Masked</td></tr>
         
-<tr><th>C4</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Allowed</td></tr>
+<tr><th scope="row">w/o persistent memory,<br>w/ direct observer attention <span class="variant-id">(C4)</span></th><td>Update + read</td><td>Reset each call in training &amp; inference</td><td>Allowed</td></tr>
       </tbody></table></div>
-      <div class="margin-note full"><span class="note-label">B@reset</span><p><strong>B@reset</strong> resets an already-trained B model only at evaluation. C is trained with resets as well. Reset applies to TTT fast weights; other inputs and position counters remain.</p></div>
+      <div class="margin-note full"><p><strong>w/o persistent memory at evaluation only (B@reset)</strong> uses the trained B weights and resets TTT fast weights each call only during evaluation. C3/C4 also reset during training. Within-call TTT updates and reads remain active.</p></div>
       
     </section>
 
