@@ -4,64 +4,58 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#183f4a">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT experiments, 18 October 2026: RMBench and RoboMME results, model variants, training data, and rollout diagnostics.">
   <title>Flex-π + TTT experiments — 18 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js?v=20261018-no-present" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261018-report">
+  <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to research update</a>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="identity" href="https://minwenliao.github.io/"><strong>Minwen Liao</strong><span class="identity-divider">/</span><span>Research notes</span></a>
-      <div class="topbar-actions">
-        <time datetime="2026-10-18">18 Oct 2026</time>
-        <nav class="section-nav" aria-label="Research sections">
-<a href="#question" aria-label="01 Overview" title="Overview" class="active">01</a>
-<a href="#architectures" aria-label="02 Model variants" title="Model variants">02</a>
-<a href="#data" aria-label="03 Training data" title="Training data">03</a>
-<a href="#results" aria-label="04 RMBench results" title="RMBench results">04</a>
-<a href="#case-explorer" aria-label="05 Task rollouts" title="Task rollouts">05</a>
-<a href="#robomme" aria-label="06 RoboMME VideoUnmask" title="RoboMME VideoUnmask">06</a>
-<a href="#controls" aria-label="07 Earlier experiments" title="Earlier experiments">07</a>
-</nav>
-      </div>
-    </div>
+  <header class="report-header" id="question">
+    <h1>Flex-π + TTT experiments</h1>
+    <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-18">18 October 2026</time></p>
+    <nav class="section-nav" aria-label="Research sections">
+      <a href="#results">RMBench results</a>
+      <a href="#architectures">Model variants</a>
+      <a href="#data">Data and training</a>
+      <a href="#case-explorer">Task rollouts</a>
+      <a href="#robomme">RoboMME</a>
+      <a href="#controls">Earlier runs</a>
+    </nav>
   </header>
-
   <main id="main">
-
-<section id="question" class="slide hero" aria-labelledby="question-title">
-      <div class="section-marker"><span>01 / Overview</span><span>Updated 18 October 2026</span></div>
-      <div class="hero-layout">
-        <div><h1 id="question-title">Flex-π + TTT<br><em>Experiment update</em></h1><p class="hero-intro">RMBench and RoboMME results, model comparisons, and task rollouts.</p></div>
-        <aside class="hero-finding" aria-label="Current test result"><span class="status-label"><span class="status-dot" aria-hidden="true"></span>B3 · 10-task test</span><div class="big-number">38.1<span>%</span></div><p class="metric-caption"><strong>381 / 1,000</strong> successful test episodes<br>Validation: 67 / 200 · 33.5%</p></aside>
-      </div>
-      <div class="hero-bottom"><a class="text-link" href="#results">View results <span aria-hidden="true">↓</span></a><a class="text-link" href="#case-explorer">Watch task rollouts <span aria-hidden="true">↗</span></a></div>
+<section id="results" class="slide" aria-labelledby="results-title">
+      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>B3: <strong>381 / 1,000</strong> successful test episodes (38.1%).</p></div>
+      <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3, 32-step evaluation. Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="results-body">
+<tr><th scope="row">rearrange_blocks</th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
+<tr><th scope="row">blocks_ranking_try</th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
+<tr><th scope="row">put_back_block</th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
+<tr><th scope="row">swap_blocks</th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
+<tr><th scope="row">battery_try</th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
+<tr><th scope="row">swap_T</th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
+<tr><th scope="row">cover_blocks</th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
+<tr><th scope="row">observe_and_pickup</th><td>1 / 20</td><td><strong>4 / 100</strong></td></tr>
+<tr><th scope="row">press_button</th><td>1 / 20</td><td><strong>3 / 100</strong></td></tr>
+<tr><th scope="row">place_block_mat</th><td>0 / 20</td><td><strong>2 / 100</strong></td></tr>
+</tbody><tfoot><tr><th scope="row">All 10 tasks</th><td><strong>67 / 200</strong></td><td><strong>381 / 1,000</strong></td></tr></tfoot></table></div>
     </section>
 
 <section id="architectures" class="slide" aria-labelledby="architectures-title">
-      
-<div class="section-marker"><span>02 / Model variants</span><span>A · B3 · B4 · C3 · C4</span></div>
       
 <div class="section-heading"><h2 id="architectures-title">A, B3/B4, and C3/C4</h2><p>A has no TTT. B retains fast weights across calls; C resets them. The 3/4 variants differ in whether action tokens can directly attend to observer tokens.</p></div>
       <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
       <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
         <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations.</figcaption></figure>
-        <div class="figure-downloads"><span>16:9 · open diagram to enlarge</span><a href="figures/abc-overview.svg" download>Editable SVG ↓</a><a href="figures/abc-overview.png" download>PNG ↓</a></div>
       </div>
       <div id="figure-panel-1" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-1" hidden>
         <figure><a class="diagram-open" href="figures/abc-visible-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B4 · C4 diagram at full size"><img src="figures/abc-visible-overview.svg" width="1920" height="1080" alt="B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference."></a><figcaption>B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference.</figcaption></figure>
-        <div class="figure-downloads"><span>16:9 · open diagram to enlarge</span><a href="figures/abc-visible-overview.svg" download>Editable SVG ↓</a><a href="figures/abc-visible-overview.png" download>PNG ↓</a></div>
       </div>
       <div id="figure-panel-2" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-2" hidden>
         <figure><a class="diagram-open" href="figures/observer-visibility.svg" target="_blank" rel="noopener" aria-label="Open 3 vs. 4 diagram at full size"><img src="figures/observer-visibility.svg" width="1920" height="1080" alt="In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four."></a><figcaption>In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four.</figcaption></figure>
-        <div class="figure-downloads"><span>16:9 · open diagram to enlarge</span><a href="figures/observer-visibility.svg" download>Editable SVG ↓</a><a href="figures/observer-visibility.png" download>PNG ↓</a></div>
       </div>
       <div id="figure-panel-3" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-3" hidden>
         <figure><a class="diagram-open" href="figures/memory-persistence.svg" target="_blank" rel="noopener" aria-label="Open Carry vs. reset diagram at full size"><img src="figures/memory-persistence.svg" width="1920" height="1080" alt="B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference."></a><figcaption>B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference.</figcaption></figure>
-        <div class="figure-downloads"><span>16:9 · open diagram to enlarge</span><a href="figures/memory-persistence.svg" download>Editable SVG ↓</a><a href="figures/memory-persistence.png" download>PNG ↓</a></div>
       </div>
 
       <div class="table-wrap"><table class="arm-table"><caption>Model settings</caption><thead>
@@ -83,128 +77,117 @@
 
 <section id="data" class="slide" aria-labelledby="data-title">
       
-<div class="section-marker"><span>03 / Data and training</span><span>RMBench · VideoUnmask</span></div>
-      
 <div class="section-heading"><h2 id="data-title">Data and training</h2></div>
-      <div class="dataset-grid">
-        <div class="dataset-summary">
-          <h3 id="rmbench-data-title">RMBench</h3>
-          <table class="dataset-table" aria-labelledby="rmbench-data-title"><tbody>
-            <tr><th scope="row">Demonstrations</th><td>200 per task × 10 tasks</td></tr>
-            <tr><th scope="row">Training</th><td>20,000 updates</td></tr>
-            <tr><th scope="row">Initialization</th><td>RoboTwin-pretrained Flex-π</td></tr>
-          </tbody></table>
-        </div>
-        <div class="dataset-summary">
-          <h3 id="robomme-data-title">RoboMME · VideoUnmask</h3>
-          <table class="dataset-table" aria-labelledby="robomme-data-title"><tbody>
-            <tr><th scope="row">Demonstrations</th><td>90 train + 10 held out</td></tr>
-            <tr><th scope="row">Initialization</th><td>LIBERO-pretrained Flex-π</td></tr>
-            <tr class="dataset-eval-start"><th scope="row">Validation</th><td>20 rollout episodes</td></tr>
-            <tr><th scope="row">Test</th><td>50 rollout episodes</td></tr>
-          </tbody></table>
-        </div>
+      <div class="data-overview">
+        <article class="dataset-row" aria-labelledby="rmbench-data-title">
+          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10 tasks</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><strong>200</strong> demonstrations per task</p>
+            <dl class="dataset-facts">
+              <div><dt>Training</dt><dd>20,000 updates</dd></div>
+              <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
+            </dl>
+          </div>
+        </article>
+        <article class="dataset-row" aria-labelledby="robomme-data-title">
+          <div class="dataset-identity"><h3 id="robomme-data-title">RoboMME</h3><p>VideoUnmask</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><span><strong>90</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>10</strong> held out</span></p>
+            <dl class="dataset-facts">
+              <div><dt>Evaluation episodes</dt><dd>20 validation · 50 test</dd></div>
+              <div><dt>Pretrained model</dt><dd>LIBERO Flex-π</dd></div>
+            </dl>
+          </div>
+        </article>
       </div>
 
     </section>
 
-<section id="results" class="slide" aria-labelledby="results-title">
-      <div class="section-marker"><span>04 / RMBench results</span><span>200 demos per task · 32-step evaluation</span></div>
-      <div class="results-heading"><div class="section-heading"><h2 id="results-title">RMBench results</h2></div><div class="result-total"><strong>381<span>/ 1,000</span></strong><span>38.1% test success</span></div></div>
-      <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="results-body">
-<tr><th scope="row">rearrange_blocks</th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
-<tr><th scope="row">blocks_ranking_try</th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
-<tr><th scope="row">put_back_block</th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
-<tr><th scope="row">swap_blocks</th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
-<tr><th scope="row">battery_try</th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
-<tr><th scope="row">swap_T</th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
-<tr><th scope="row">cover_blocks</th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
-<tr><th scope="row">observe_and_pickup</th><td>1 / 20</td><td><strong>4 / 100</strong></td></tr>
-<tr><th scope="row">press_button</th><td>1 / 20</td><td><strong>3 / 100</strong></td></tr>
-<tr><th scope="row">place_block_mat</th><td>0 / 20</td><td><strong>2 / 100</strong></td></tr>
-</tbody><tfoot><tr><th scope="row">All 10 tasks</th><td><strong>67 / 200</strong></td><td><strong>381 / 1,000</strong></td></tr></tfoot></table></div>
-    </section>
-
 <section id="case-explorer" class="slide" aria-labelledby="cases-title">
-      <div class="section-marker"><span>05 / Task rollouts</span><span>All 10 tasks</span></div>
       <div class="section-heading"><h2 id="cases-title">Task rollouts</h2><p>A success and a failure from each task.</p></div>
-      <div class="case-tabs gallery-tabs" role="tablist" aria-label="Choose a task">
-<button role="tab" id="tab-rearrange_blocks" aria-controls="panel-rearrange_blocks" aria-selected="true" tabindex="0">rearrange_blocks</button>
-<button role="tab" id="tab-blocks_ranking_try" aria-controls="panel-blocks_ranking_try" aria-selected="false" tabindex="-1">blocks_ranking_try</button>
-<button role="tab" id="tab-put_back_block" aria-controls="panel-put_back_block" aria-selected="false" tabindex="-1">put_back_block</button>
-<button role="tab" id="tab-swap_blocks" aria-controls="panel-swap_blocks" aria-selected="false" tabindex="-1">swap_blocks</button>
-<button role="tab" id="tab-battery_try" aria-controls="panel-battery_try" aria-selected="false" tabindex="-1">battery_try</button>
-<button role="tab" id="tab-swap_T" aria-controls="panel-swap_T" aria-selected="false" tabindex="-1">swap_T</button>
-<button role="tab" id="tab-cover_blocks" aria-controls="panel-cover_blocks" aria-selected="false" tabindex="-1">cover_blocks</button>
-<button role="tab" id="tab-observe_and_pickup" aria-controls="panel-observe_and_pickup" aria-selected="false" tabindex="-1">observe_and_pickup</button>
-<button role="tab" id="tab-press_button" aria-controls="panel-press_button" aria-selected="false" tabindex="-1">press_button</button>
-<button role="tab" id="tab-place_block_mat" aria-controls="panel-place_block_mat" aria-selected="false" tabindex="-1">place_block_mat</button>
+      <nav class="task-index" aria-label="Jump to a task">
+<a href="#panel-rearrange_blocks">rearrange_blocks</a>
+<a href="#panel-blocks_ranking_try">blocks_ranking_try</a>
+<a href="#panel-put_back_block">put_back_block</a>
+<a href="#panel-swap_blocks">swap_blocks</a>
+<a href="#panel-battery_try">battery_try</a>
+<a href="#panel-swap_T">swap_T</a>
+<a href="#panel-cover_blocks">cover_blocks</a>
+<a href="#panel-observe_and_pickup">observe_and_pickup</a>
+<a href="#panel-press_button">press_button</a>
+<a href="#panel-place_block_mat">place_block_mat</a>
+</nav>
+<div id="panel-rearrange_blocks" class="task-gallery-panel" aria-labelledby="task-rearrange_blocks">
+<h3 id="task-rearrange_blocks" class="task-title">rearrange_blocks</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200002.jpg" aria-label="rearrange_blocks · Success · Validation · 200002"><source src="assets/videos/e32c32/rearrange_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200000.jpg" aria-label="rearrange_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/rearrange_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-rearrange_blocks"><h4 id="analysis-rearrange_blocks">The button is pressed before the block reaches the empty mat</h4><p>The button is pressed at step 203, but the trajectory shows that the block never reaches the target mat. The episode ends at the 700-step limit without completing the task.</p></article>
 </div>
-<div id="panel-rearrange_blocks" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-rearrange_blocks" >
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200002.jpg" aria-label="rearrange_blocks · Success · Validation · 200002"><source src="assets/videos/e32c32/rearrange_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>rearrange_blocks</code><span>seed 200002</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200000.jpg" aria-label="rearrange_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/rearrange_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>rearrange_blocks</code><span>seed 200000</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-rearrange_blocks"><h3 id="analysis-rearrange_blocks">The button is pressed before the block reaches the empty mat</h3><p>The button is pressed at step 203, but the trajectory shows that the block never reaches the target mat. The episode ends at the 700-step limit without completing the task.</p></article>
+<div id="panel-blocks_ranking_try" class="task-gallery-panel" aria-labelledby="task-blocks_ranking_try">
+<h3 id="task-blocks_ranking_try" class="task-title">blocks_ranking_try</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200000.jpg" aria-label="blocks_ranking_try · Success · Validation · 200000"><source src="assets/videos/e32c32/blocks_ranking_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200008.jpg" aria-label="blocks_ranking_try · Failure · Validation · 200008"><source src="assets/videos/e32c32/blocks_ranking_try/seed200008.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200008</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-blocks_ranking_try"><h4 id="analysis-blocks_ranking_try">The episode times out before completing the ordering task</h4><p>This episode reaches the 3,500-step limit. The available records do not yet identify the first failed action, so they do not establish whether the problem is the chosen order or an incomplete transfer.</p></article>
 </div>
-<div id="panel-blocks_ranking_try" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-blocks_ranking_try" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200000.jpg" aria-label="blocks_ranking_try · Success · Validation · 200000"><source src="assets/videos/e32c32/blocks_ranking_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>blocks_ranking_try</code><span>seed 200000</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200008.jpg" aria-label="blocks_ranking_try · Failure · Validation · 200008"><source src="assets/videos/e32c32/blocks_ranking_try/seed200008.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>blocks_ranking_try</code><span>seed 200008</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-blocks_ranking_try"><h3 id="analysis-blocks_ranking_try">The episode times out before completing the ordering task</h3><p>This episode reaches the 3,500-step limit. The available records do not yet identify the first failed action, so they do not establish whether the problem is the chosen order or an incomplete transfer.</p></article>
+<div id="panel-put_back_block" class="task-gallery-panel" aria-labelledby="task-put_back_block">
+<h3 id="task-put_back_block" class="task-title">put_back_block</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200000.jpg" aria-label="put_back_block · Success · Validation · 200000"><source src="assets/videos/e32c32/put_back_block/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200001.jpg" aria-label="put_back_block · Failure · Validation · 200001"><source src="assets/videos/e32c32/put_back_block/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200001</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-put_back_block"><h4 id="analysis-put_back_block">The button is pressed before the block is centered</h4><p>The evaluation record explicitly flags a button press before the block is centered. The task remains incomplete when the episode reaches its 500-step limit.</p></article>
 </div>
-<div id="panel-put_back_block" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-put_back_block" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200000.jpg" aria-label="put_back_block · Success · Validation · 200000"><source src="assets/videos/e32c32/put_back_block/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>put_back_block</code><span>seed 200000</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200001.jpg" aria-label="put_back_block · Failure · Validation · 200001"><source src="assets/videos/e32c32/put_back_block/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>put_back_block</code><span>seed 200001</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-put_back_block"><h3 id="analysis-put_back_block">The button is pressed before the block is centered</h3><p>The evaluation record explicitly flags a button press before the block is centered. The task remains incomplete when the episode reaches its 500-step limit.</p></article>
+<div id="panel-swap_blocks" class="task-gallery-panel" aria-labelledby="task-swap_blocks">
+<h3 id="task-swap_blocks" class="task-title">swap_blocks</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200040.jpg" aria-label="swap_blocks · Success · Validation · 200040"><source src="assets/videos/e32c32/swap_blocks/seed200040.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200040</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200000.jpg" aria-label="swap_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/swap_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-swap_blocks"><h4 id="analysis-swap_blocks">Two transfers work; the third grasp misses</h4><p>The third grasp is 2.1 cm off. The gripper contacts the block’s edge, pushes it, and then lifts empty. It still moves to the destination tray, opens, and presses the button, leaving the third transfer incomplete.</p></article>
 </div>
-<div id="panel-swap_blocks" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-swap_blocks" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200040.jpg" aria-label="swap_blocks · Success · Validation · 200040"><source src="assets/videos/e32c32/swap_blocks/seed200040.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>swap_blocks</code><span>seed 200040</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200000.jpg" aria-label="swap_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/swap_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>swap_blocks</code><span>seed 200000</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-swap_blocks"><h3 id="analysis-swap_blocks">Two transfers work; the third grasp misses</h3><p>The third grasp is 2.1 cm off. The gripper contacts the block’s edge, pushes it, and then lifts empty. It still moves to the destination tray, opens, and presses the button, leaving the third transfer incomplete.</p></article>
+<div id="panel-battery_try" class="task-gallery-panel" aria-labelledby="task-battery_try">
+<h3 id="task-battery_try" class="task-title">battery_try</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200000.jpg" aria-label="battery_try · Success · Validation · 200000"><source src="assets/videos/e32c32/battery_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200005.jpg" aria-label="battery_try · Failure · Validation · 200005"><source src="assets/videos/e32c32/battery_try/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200005</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-battery_try"><h4 id="analysis-battery_try">The second battery is placed off target and slips away</h4><p>The second battery is lowered about 3 cm off target, toward the first battery’s position. It slips during the descent and falls onto the table. The policy keeps adjusting the first battery without retrieving the second.</p></article>
 </div>
-<div id="panel-battery_try" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-battery_try" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200000.jpg" aria-label="battery_try · Success · Validation · 200000"><source src="assets/videos/e32c32/battery_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>battery_try</code><span>seed 200000</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200005.jpg" aria-label="battery_try · Failure · Validation · 200005"><source src="assets/videos/e32c32/battery_try/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>battery_try</code><span>seed 200005</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-battery_try"><h3 id="analysis-battery_try">The second battery is placed off target and slips away</h3><p>The second battery is lowered about 3 cm off target, toward the first battery’s position. It slips during the descent and falls onto the table. The policy keeps adjusting the first battery without retrieving the second.</p></article>
+<div id="panel-swap_T" class="task-gallery-panel" aria-labelledby="task-swap_T">
+<h3 id="task-swap_T" class="task-title">swap_T</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200003.jpg" aria-label="swap_T · Success · Validation · 200003"><source src="assets/videos/e32c32/swap_T/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200003</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200001.jpg" aria-label="swap_T · Failure · Validation · 200001"><source src="assets/videos/e32c32/swap_T/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200001</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-swap_T"><h4 id="analysis-swap_T">The blocks change sides, but the second T has the wrong angle</h4><p>When the second T is placed, its orientation is about 17° from the target, beyond the 15° tolerance. Further adjustments also move the first T away from its required orientation, leaving the task incomplete.</p></article>
 </div>
-<div id="panel-swap_T" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-swap_T" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200003.jpg" aria-label="swap_T · Success · Validation · 200003"><source src="assets/videos/e32c32/swap_T/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>swap_T</code><span>seed 200003</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200001.jpg" aria-label="swap_T · Failure · Validation · 200001"><source src="assets/videos/e32c32/swap_T/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>swap_T</code><span>seed 200001</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-swap_T"><h3 id="analysis-swap_T">The blocks change sides, but the second T has the wrong angle</h3><p>When the second T is placed, its orientation is about 17° from the target, beyond the 15° tolerance. Further adjustments also move the first T away from its required orientation, leaving the task incomplete.</p></article>
+<div id="panel-cover_blocks" class="task-gallery-panel" aria-labelledby="task-cover_blocks">
+<h3 id="task-cover_blocks" class="task-title">cover_blocks</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200016.jpg" aria-label="cover_blocks · Success · Validation · 200016"><source src="assets/videos/e32c32/cover_blocks/seed200016.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200016</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200002.jpg" aria-label="cover_blocks · Failure · Validation · 200002"><source src="assets/videos/e32c32/cover_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-cover_blocks"><h4 id="analysis-cover_blocks">Covering works; the first uncovering step is wrong</h4><p>This episode requires the same uncovering order as the successful example above, but the policy removes the middle lid first. The order violation is recorded at step 637 and permanently fails the task; removing the remaining lids cannot undo it.</p></article>
 </div>
-<div id="panel-cover_blocks" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-cover_blocks" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200016.jpg" aria-label="cover_blocks · Success · Validation · 200016"><source src="assets/videos/e32c32/cover_blocks/seed200016.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>cover_blocks</code><span>seed 200016</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200002.jpg" aria-label="cover_blocks · Failure · Validation · 200002"><source src="assets/videos/e32c32/cover_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>cover_blocks</code><span>seed 200002</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-cover_blocks"><h3 id="analysis-cover_blocks">Covering works; the first uncovering step is wrong</h3><p>This episode requires the same uncovering order as the successful example above, but the policy removes the middle lid first. The order violation is recorded at step 637 and permanently fails the task; removing the remaining lids cannot undo it.</p></article>
+<div id="panel-observe_and_pickup" class="task-gallery-panel" aria-labelledby="task-observe_and_pickup">
+<h3 id="task-observe_and_pickup" class="task-title">observe_and_pickup</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200003.jpg" aria-label="observe_and_pickup · Success · Validation · 200003"><source src="assets/videos/e32c32/observe_and_pickup/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200003</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200005.jpg" aria-label="observe_and_pickup · Failure · Validation · 200005"><source src="assets/videos/e32c32/observe_and_pickup/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200005</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-observe_and_pickup"><h4 id="analysis-observe_and_pickup">The target is a mouse; the policy lifts a stapler</h4><p>The task shows a mouse at the start and then hides it behind a wall. The policy does grasp and lift an object, but it chooses the stapler about 7 cm from the mouse.</p></article>
 </div>
-<div id="panel-observe_and_pickup" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-observe_and_pickup" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200003.jpg" aria-label="observe_and_pickup · Success · Validation · 200003"><source src="assets/videos/e32c32/observe_and_pickup/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>observe_and_pickup</code><span>seed 200003</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200005.jpg" aria-label="observe_and_pickup · Failure · Validation · 200005"><source src="assets/videos/e32c32/observe_and_pickup/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>observe_and_pickup</code><span>seed 200005</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-observe_and_pickup"><h3 id="analysis-observe_and_pickup">The target is a mouse; the policy lifts a stapler</h3><p>The task shows a mouse at the start and then hides it behind a wall. The policy does grasp and lift an object, but it chooses the stapler about 7 cm from the mouse.</p></article>
+<div id="panel-press_button" class="task-gallery-panel" aria-labelledby="task-press_button">
+<h3 id="task-press_button" class="task-title">press_button</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200017.jpg" aria-label="press_button · Success · Validation · 200017"><source src="assets/videos/e32c32/press_button/seed200017.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200017</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200004.jpg" aria-label="press_button · Failure · Validation · 200004"><source src="assets/videos/e32c32/press_button/seed200004.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200004</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-press_button"><h4 id="analysis-press_button">The card says one press; the policy makes four</h4><p>The button whose card shows 1 is pressed four times, so confirmation is rejected. Each physical press registers exactly once, ruling out duplicate triggers. The records do not yet distinguish misreading the card, forgetting its value, or miscounting presses.</p></article>
 </div>
-<div id="panel-press_button" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-press_button" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200017.jpg" aria-label="press_button · Success · Validation · 200017"><source src="assets/videos/e32c32/press_button/seed200017.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>press_button</code><span>seed 200017</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200004.jpg" aria-label="press_button · Failure · Validation · 200004"><source src="assets/videos/e32c32/press_button/seed200004.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>press_button</code><span>seed 200004</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-press_button"><h3 id="analysis-press_button">The card says one press; the policy makes four</h3><p>The button whose card shows 1 is pressed four times, so confirmation is rejected. Each physical press registers exactly once, ruling out duplicate triggers. The records do not yet distinguish misreading the card, forgetting its value, or miscounting presses.</p></article>
-</div>
-<div id="panel-place_block_mat" class="case-panel task-gallery-panel" role="tabpanel" aria-labelledby="tab-place_block_mat" hidden>
-<figure class="video-figure gallery-card success-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><span>Test</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed100042.jpg" aria-label="place_block_mat · Success · Test · 100042"><source src="assets/videos/e32c32/place_block_mat/seed100042.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>place_block_mat</code><span>seed 100042</span></figcaption></figure>
-<figure class="video-figure gallery-card failure-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed200002.jpg" aria-label="place_block_mat · Failure · Validation · 200002"><source src="assets/videos/e32c32/place_block_mat/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption><code>place_block_mat</code><span>seed 200002</span></figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-place_block_mat"><h3 id="analysis-place_block_mat">The first reach goes to an empty mat, followed by an empty transfer</h3><p>At step 60, the gripper closes over an empty mat, 9.5 cm from the leftmost block, without making contact. It then lifts, moves to the green mat, opens, and performs the return motion without carrying the block.</p></article>
+<div id="panel-place_block_mat" class="task-gallery-panel" aria-labelledby="task-place_block_mat">
+<h3 id="task-place_block_mat" class="task-title">place_block_mat</h3>
+<figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Test</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed100042.jpg" aria-label="place_block_mat · Success · Test · 100042"><source src="assets/videos/e32c32/place_block_mat/seed100042.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 100042</figcaption></figure>
+<figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed200002.jpg" aria-label="place_block_mat · Failure · Validation · 200002"><source src="assets/videos/e32c32/place_block_mat/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
+<article class="task-analysis" aria-labelledby="analysis-place_block_mat"><h4 id="analysis-place_block_mat">The first reach goes to an empty mat, followed by an empty transfer</h4><p>At step 60, the gripper closes over an empty mat, 9.5 cm from the leftmost block, without making contact. It then lifts, moves to the green mat, opens, and performs the return motion without carrying the block.</p></article>
 </div>
     </section>
 
 <section id="robomme" class="slide" aria-labelledby="robomme-title">
       
-<div class="section-marker"><span>06 / RoboMME VideoUnmask</span><span>Earlier 6k runs · test episode 005</span></div>
-      
 <div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2></div>
-      <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">4k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">6k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object. Recorded outcome: success.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Timeout</span><code>test / 005</code></div><h3>C3 · reset in training + test</h3><p class="clip-provenance">2k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><code>test / 005</code></div><h3>B3 · reset only at evaluation</h3><p class="clip-provenance">Same B3 weights · 6k</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully with the same B3 weights and memory reset.</figcaption></figure></div>
+      <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">4k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">6k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object. Recorded outcome: success.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>C3 · reset in training + test</h3><p class="clip-provenance">2k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · reset only at evaluation</h3><p class="clip-provenance">Same B3 weights · 6k</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully with the same B3 weights and memory reset.</figcaption></figure></div>
       <div class="video-toolbar"><button id="robomme-play" class="button primary" type="button">Play all from the start</button><span id="robomme-status" role="status"></span></div>
       
     </section>
 
 <section id="controls" class="slide" aria-labelledby="controls-title">
-      
-<div class="section-marker"><span>07 / Earlier experiments</span><span>Previously reported results</span></div>
       
 <div class="section-heading"><h2 id="controls-title">Results from earlier runs</h2><p>These models were trained on smaller task groups. Their results are listed separately from the 10-task run.</p></div>
       <div class="table-wrap">
@@ -226,7 +209,6 @@
       </div>
 
     </section>
-
   </main>
 </body>
 </html>
