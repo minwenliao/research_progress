@@ -26,7 +26,7 @@
   </header>
   <main id="main">
 <section id="results" class="slide" aria-labelledby="results-title">
-      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>B3: <strong>381 / 1,000</strong> successful test episodes (38.1%).</p></div>
+      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>B3: <strong>381 / 1,000</strong> successful test episodes (38.1%). Trained on <strong>45 demonstrations per task</strong> across 10 tasks.</p></div>
       <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3, 32-step evaluation. Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="results-body">
 <tr><th scope="row">rearrange_blocks</th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
 <tr><th scope="row">blocks_ranking_try</th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
@@ -80,12 +80,26 @@
 <div class="section-heading"><h2 id="data-title">Data and training</h2></div>
       <div class="data-overview">
         <article class="dataset-row" aria-labelledby="rmbench-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10 tasks</p></div>
+          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10-task B3</p></div>
           <div class="dataset-content">
-            <p class="dataset-count"><strong>200</strong> demonstrations per task</p>
+            <p class="dataset-count"><span><strong>45</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>5</strong> held out per task</span></p>
             <dl class="dataset-facts">
+              <div><dt>Total demonstrations</dt><dd>450 train · 50 held out</dd></div>
               <div><dt>Training</dt><dd>20,000 updates</dd></div>
               <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
+              <div><dt>Other 10-task models</dt><dd>C3 and B4 trained; evaluation not yet reported</dd></div>
+            </dl>
+          </div>
+        </article>
+        <article class="dataset-row" aria-labelledby="rmbench-expanded-data-title">
+          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>200-demo · 4 tasks</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><span><strong>780</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>20</strong> held out in total</span></p>
+            <dl class="dataset-facts">
+              <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
+              <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
+              <div><dt>Training</dt><dd>20,000 updates each</dd></div>
+              <div><dt>Evaluation</dt><dd>Not yet reported</dd></div>
             </dl>
           </div>
         </article>
