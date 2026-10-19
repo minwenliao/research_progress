@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT research progress: manipulation with 45 training demonstrations per task, memory interventions, and limitations in using brief target cues.">
   <title>Flex-π + TTT experiments — 18 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261018-findings">
+  <link rel="stylesheet" href="style.css?v=20261018-cover-analysis">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
@@ -118,7 +118,23 @@
 <h3 id="task-cover_blocks" class="task-title">cover_blocks</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200016.jpg" aria-label="cover_blocks · Success · Validation · 200016"><source src="assets/videos/e32c32/cover_blocks/seed200016.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200016</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200002.jpg" aria-label="cover_blocks · Failure · Validation · 200002"><source src="assets/videos/e32c32/cover_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-cover_blocks"><h4 id="analysis-cover_blocks">The robot removes the wrong lid first</h4><p>This episode requires the same uncovering order as the successful rollout (seed 200016). After covering the blocks, the robot removes the middle lid first. The evaluator records the order violation at step 637, and the episode remains a failure even if the remaining lids are removed.</p></article>
+<article class="task-analysis cover-analysis" aria-labelledby="analysis-cover_blocks">
+  <h4 id="analysis-cover_blocks">The robot covers the blocks but often chooses the wrong lid to uncover</h4>
+  <p>The blocks must be uncovered in red, green, and blue order after their colors are hidden. In the failed rollout above (seed 200002), the robot removes the middle lid first; the evaluator records the order violation at step 637.</p>
+  <p>In the ten-task B3 test run, the robot covered all three blocks in <strong>100/100</strong> episodes, selected the correct first lid in <strong>29/100</strong>, and completed the task in <strong>6/100</strong>. For reference, choosing uniformly among three lids gives a 1/3 probability of selecting the correct first lid.</p>
+  <div class="table-wrap task-stage-comparison">
+    <table>
+      <caption>Same 20 validation seeds</caption>
+      <thead><tr><th scope="col">Outcome</th><th scope="col">10-task B3<br>45 training demos/task</th><th scope="col">4-task B3<br>≈195 training demos/task</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">All three blocks covered</th><td>20/20</td><td>20/20</td></tr>
+        <tr><th scope="row">Correct first lid</th><td>7/20</td><td>7/20</td></tr>
+        <tr><th scope="row">Task completed</th><td>1/20</td><td>1/20</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The larger-data run produced the same validation counts. The task mix also changed, so this comparison does not isolate the effect of data volume. We have not yet determined whether the model fails to store which color is under each lid or fails to use that information when choosing.</p>
+</article>
 </div>
 <div id="panel-observe_and_pickup" class="task-gallery-panel" aria-labelledby="task-observe_and_pickup">
 <h3 id="task-observe_and_pickup" class="task-title">observe_and_pickup</h3>
@@ -195,7 +211,7 @@
               <div><dt>Simulation runs per task</dt><dd>20 validation · 100 test</dd></div>
               <div><dt>Training</dt><dd>20,000 updates</dd></div>
               <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
-              <div><dt>Other 10-task models</dt><dd>C3 and B4 trained; evaluation not yet reported</dd></div>
+              <div><dt>Other 10-task models</dt><dd>C3 and B4 validation complete</dd></div>
             </dl>
           </div>
         </article>
@@ -207,7 +223,7 @@
               <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
               <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
               <div><dt>Training</dt><dd>20,000 updates each</dd></div>
-              <div><dt>Evaluation</dt><dd>Not yet reported</dd></div>
+              <div><dt>Evaluation</dt><dd>Validation complete; <a href="#analysis-cover_blocks">cover_blocks analysis above</a></dd></div>
             </dl>
           </div>
         </article>

@@ -133,6 +133,12 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .task-analysis { grid-column: 1 / -1; max-width: 980px; margin-top: 2px; }
 .task-analysis h4 { margin-bottom: 8px; }
 .task-analysis p { color: #444; font-size: 18px; line-height: 1.5; }
+.cover-analysis p + p { margin-top: 14px; }
+.task-stage-comparison { margin: 22px 0 18px; }
+.task-stage-comparison table { table-layout: fixed; }
+.task-stage-comparison caption { font-size: 18px; }
+.task-stage-comparison th:first-child { width: 34%; }
+.task-stage-comparison td, .task-stage-comparison thead th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
 .robomme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 30px; }
 .robomme-card h3 { font-size: 22px; }
 .clip-provenance { margin: 6px 0 14px; color: var(--muted); font-size: 16px; }
@@ -190,6 +196,7 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
   .task-gallery-panel, .robomme-grid { grid-template-columns: 1fr; gap: 24px; }
   .task-gallery-panel { padding-bottom: 34px; margin-bottom: 30px; }
   .task-analysis p { font-size: 17px; }
+  .task-stage-comparison thead th { font-size: 15px; }
   .robomme-grid { gap: 36px; }
   .robomme-card h3 { font-size: 21px; }
 }
