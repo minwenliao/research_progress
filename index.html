@@ -84,12 +84,28 @@
 
 <section id="data" class="slide" aria-labelledby="data-title">
       
-<div class="section-marker"><span>03 / Training data</span><span>RMBench · VideoUnmask</span></div>
+<div class="section-marker"><span>03 / Data and training</span><span>RMBench · VideoUnmask</span></div>
       
-<div class="section-heading"><h2 id="data-title">Demonstration data for the current B3 model</h2><p>As confirmed for this update, the RMBench results shown here correspond to 200 demonstrations per task across 10 tasks.</p></div>
-      <div class="data-cards"><article><span class="eyebrow">Demonstrations per task</span><strong>200</strong><p>Recorded demonstrations</p></article><article><span class="eyebrow">Tasks</span><strong>10</strong><p>RMBench tasks</p></article><article><span class="eyebrow">Total demonstrations</span><strong>2,000</strong><p>10 tasks × 200 demonstrations</p></article></div>
-      <div class="two-column data-detail"><div><h3>RMBench · all 10 tasks</h3><dl class="protocol-list"><div><dt>Per-task source</dt><dd>200 recorded demonstrations</dd></div><div><dt>Training budget</dt><dd>20,000 optimizer updates, one episode per update; demonstrations are revisited</dd></div><div><dt>Initialization</dt><dd>Pretrained RoboTwin Flex-π; fresh downstream TTT run</dd></div></dl></div>
-      <div><h3>RoboMME · VideoUnmask</h3><dl class="protocol-list"><div><dt>Official train set</dt><dd>100 episodes → <strong>90 train + 10 held out</strong></dd></div><div><dt>Closed-loop val</dt><dd>20 official validation episodes</dd></div><div><dt>Closed-loop test</dt><dd>50 official test episodes</dd></div><div><dt>Initialization</dt><dd>Pretrained LIBERO Flex-π</dd></div></dl></div></div>
+<div class="section-heading"><h2 id="data-title">Data and training</h2></div>
+      <div class="dataset-grid">
+        <div class="dataset-summary">
+          <h3 id="rmbench-data-title">RMBench</h3>
+          <table class="dataset-table" aria-labelledby="rmbench-data-title"><tbody>
+            <tr><th scope="row">Demonstrations</th><td>200 per task × 10 tasks</td></tr>
+            <tr><th scope="row">Training</th><td>20,000 updates</td></tr>
+            <tr><th scope="row">Initialization</th><td>RoboTwin-pretrained Flex-π</td></tr>
+          </tbody></table>
+        </div>
+        <div class="dataset-summary">
+          <h3 id="robomme-data-title">RoboMME · VideoUnmask</h3>
+          <table class="dataset-table" aria-labelledby="robomme-data-title"><tbody>
+            <tr><th scope="row">Demonstrations</th><td>90 train + 10 held out</td></tr>
+            <tr><th scope="row">Initialization</th><td>LIBERO-pretrained Flex-π</td></tr>
+            <tr class="dataset-eval-start"><th scope="row">Validation</th><td>20 rollout episodes</td></tr>
+            <tr><th scope="row">Test</th><td>50 rollout episodes</td></tr>
+          </tbody></table>
+        </div>
+      </div>
 
     </section>
 

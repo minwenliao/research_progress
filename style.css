@@ -117,3 +117,45 @@ blockquote, .takeaway {
   .data-cards strong { font-size: 38px; }
   .data-detail h3 { font-size: 21px; }
 }
+
+/* Dataset summaries: one entry per quantity, with evaluation kept separate. */
+.dataset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+}
+.dataset-summary h3 {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.dataset-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.dataset-table th, .dataset-table td {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.dataset-table th {
+  width: 35%;
+  padding-right: 20px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.dataset-table td { color: var(--ink); }
+.dataset-table .dataset-eval-start th,
+.dataset-table .dataset-eval-start td { padding-top: 30px; }
+@media (max-width: 900px) {
+  .dataset-grid { grid-template-columns: 1fr; gap: 40px; }
+  .dataset-summary h3 { font-size: 21px; }
+}
+@media (max-width: 580px) {
+  .dataset-table { font-size: 14px; }
+  .dataset-table th { width: 40%; padding-right: 14px; }
+}
