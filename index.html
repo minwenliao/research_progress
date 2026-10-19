@@ -42,14 +42,14 @@
         </article>
         <article class="finding" aria-labelledby="finding-limitations">
           <h3 id="finding-limitations">Object selection, counting, and repeated transfers remain difficult</h3>
-          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. Limited demonstration coverage and difficulty learning to store and use object identities, orientations, or action counts are possible limitations.</p>
-          <p>In the object-selection episodes examined, changing the initially displayed target did not change the object chosen, even at the first decision after the target was hidden. We have not yet distinguished a failure to encode the cue from a failure to use it when selecting actions.</p>
+          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. In the failures examined, the robot selects the wrong object, misses a grasp, places an object at the wrong angle, or presses a button too many times. Limited demonstration coverage may contribute to these errors, but whether more data helps has not yet been tested.</p>
+          <p>In the object-selection episodes examined, changing the initially displayed target did not change the object chosen, even at the first decision after the target was hidden. We do not yet know whether the model fails to store the target’s identity or fails to use that information when choosing an object.</p>
         </article>
       </div>
     </section>
 
 <section id="results" class="slide" aria-labelledby="results-title">
-      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>The ten-task B3 model succeeds in <strong>381 / 1,000</strong> test episodes (38.1%). Each task has 20 validation episodes and 100 test episodes; the table reports successful episodes.</p></div>
+      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>The ten-task B3 model succeeds in <strong>381 / 1,000</strong> test episodes (38.1%). For each task, the model acts in 20 validation and 100 test simulation runs; the table counts successful runs. The five held-out demonstrations are recorded expert trajectories used for offline checks, separate from these simulation runs.</p></div>
       <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3, 32-step evaluation. Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="results-body">
 <tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
@@ -82,7 +82,7 @@
 <h3 id="task-rearrange_blocks" class="task-title">rearrange_blocks</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200002.jpg" aria-label="rearrange_blocks · Success · Validation · 200002"><source src="assets/videos/e32c32/rearrange_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/rearrange_blocks_seed200000.jpg" aria-label="rearrange_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/rearrange_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-rearrange_blocks"><h4 id="analysis-rearrange_blocks">The robot presses the button without placing the block</h4><p>The robot presses the button at step 203 while the block is still off the target mat. It never places the block on the mat and reaches the 700-step limit.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-rearrange_blocks"><h4 id="analysis-rearrange_blocks">The first grasp fails, but the robot continues the sequence</h4><p>The robot fails to lift the block, then moves its empty gripper toward the target mat and presses the button at step 203. The block never reaches the mat, and the episode ends at the 700-step limit.</p></article>
 </div>
 <div id="panel-blocks_ranking_try" class="task-gallery-panel" aria-labelledby="task-blocks_ranking_try">
 <h3 id="task-blocks_ranking_try" class="task-title">blocks_ranking_try</h3>
@@ -142,7 +142,7 @@
 
 <section id="robomme" class="slide" aria-labelledby="robomme-title">
       
-<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2></div>
+<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2><p>The robot must remove a cover to expose a hidden object. The videos below show four model variants on the same episode.</p></div>
       <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">Selected checkpoint: step 4,000</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">Selected checkpoint: step 6,000</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>C3 · reset in training + test</h3><p class="clip-provenance">Selected checkpoint: step 2,000</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · reset only at evaluation</h3><p class="clip-provenance">Same B3 weights · 6k</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully with the same B3 weights and memory reset.</figcaption></figure></div>
       <div class="video-toolbar"><button id="robomme-play" class="button primary" type="button">Play all from the start</button><span id="robomme-status" role="status"></span></div>
       
@@ -187,11 +187,12 @@
 <div class="section-heading"><h2 id="data-title">Data and training</h2></div>
       <div class="data-overview">
         <article class="dataset-row" aria-labelledby="rmbench-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10-task B3</p></div>
+          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>Current ten-task B3</p></div>
           <div class="dataset-content">
-            <p class="dataset-count"><span><strong>45</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>5</strong> held out per task</span></p>
+            <p class="dataset-count"><span><strong>45</strong> training demonstrations</span><span class="dataset-count-separator" aria-hidden="true">+</span><span><strong>5</strong> held out per task</span></p>
             <dl class="dataset-facts">
               <div><dt>Total demonstrations</dt><dd>450 train · 50 held out</dd></div>
+              <div><dt>Simulation runs per task</dt><dd>20 validation · 100 test</dd></div>
               <div><dt>Training</dt><dd>20,000 updates</dd></div>
               <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
               <div><dt>Other 10-task models</dt><dd>C3 and B4 trained; evaluation not yet reported</dd></div>
@@ -199,7 +200,7 @@
           </div>
         </article>
         <article class="dataset-row" aria-labelledby="rmbench-expanded-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>200-demo · 4 tasks</p></div>
+          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>Separate 200-demo run · 4 tasks</p></div>
           <div class="dataset-content">
             <p class="dataset-count"><span><strong>780</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>20</strong> held out in total</span></p>
             <dl class="dataset-facts">
