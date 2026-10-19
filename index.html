@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Flex-π + TTT experiments, 18 October 2026: RMBench and RoboMME results, model variants, training data, and rollout diagnostics.">
+  <meta name="description" content="Flex-π + TTT research progress: manipulation with 45 training demonstrations per task, memory interventions, and limitations in using brief target cues.">
   <title>Flex-π + TTT experiments — 18 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261018-report">
+  <link rel="stylesheet" href="style.css?v=20261018-findings">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
@@ -16,105 +16,53 @@
     <h1>Flex-π + TTT experiments</h1>
     <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-18">18 October 2026</time></p>
     <nav class="section-nav" aria-label="Research sections">
+      <a href="#findings">Main findings</a>
       <a href="#results">RMBench results</a>
-      <a href="#architectures">Model variants</a>
-      <a href="#data">Data and training</a>
       <a href="#case-explorer">Task rollouts</a>
       <a href="#robomme">RoboMME</a>
-      <a href="#controls">Earlier runs</a>
+      <a href="#architectures">Model variants</a>
+      <a href="#data">Data and training</a>
+      <a href="#controls">Earlier comparisons</a>
     </nav>
   </header>
   <main id="main">
+<section id="findings" class="slide" aria-labelledby="findings-title">
+      <div class="section-heading">
+        <h2 id="findings-title">Main findings</h2>
+        <p>We study whether test-time training (TTT) memory helps the Flex-π robot policy use earlier observations when acting—for example, to return an object to its initial location or select a target after it becomes hidden. The memory is updated as the robot acts and retained until the episode ends.</p>
+      </div>
+      <div class="findings-content">
+        <article class="finding" aria-labelledby="finding-performance">
+          <h3 id="finding-performance">High success on several tasks with 45 training demonstrations per task</h3>
+          <p>Starting from pretrained Flex-π, we use 50 demonstrations per task: 45 for training and five held out. Our ten-task model with persistent memory (B3) achieves <strong>95%</strong> success on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on returning a block to its original mat. Overall success is <strong>38.1%</strong> across 1,000 test episodes.</p>
+        </article>
+        <article class="finding" aria-labelledby="finding-memory">
+          <h3 id="finding-memory">Memory content influences which mat the robot chooses</h3>
+          <p>The block-return task requires the robot to move a block away and then return it to its original mat. In an earlier experiment, we replaced the robot’s memory with memory from another episode, where the block had started on a different mat. In all eight memory-swap trials, the robot carried the block toward that other episode’s starting mat. This intervention shows that stored episode information influences target selection in this task.</p>
+        </article>
+        <article class="finding" aria-labelledby="finding-limitations">
+          <h3 id="finding-limitations">Object selection, counting, and repeated transfers remain difficult</h3>
+          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. Limited demonstration coverage and difficulty learning to store and use object identities, orientations, or action counts are possible limitations.</p>
+          <p>In the object-selection episodes examined, changing the initially displayed target did not change the object chosen, even at the first decision after the target was hidden. We have not yet distinguished a failure to encode the cue from a failure to use it when selecting actions.</p>
+        </article>
+        <p class="findings-context">The memory-swap experiment used an earlier model trained on a smaller task group and evaluated with 16-step execution. The current ten-task scores use 32-step execution; matched memory controls under this protocol are still needed.</p>
+      </div>
+    </section>
+
 <section id="results" class="slide" aria-labelledby="results-title">
-      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>B3: <strong>381 / 1,000</strong> successful test episodes (38.1%). Trained on <strong>45 demonstrations per task</strong> across 10 tasks.</p></div>
+      <div class="section-heading"><h2 id="results-title">RMBench results</h2><p>The ten-task B3 model succeeds in <strong>381 / 1,000</strong> test episodes (38.1%). Each task has 20 validation episodes and 100 test episodes; the table reports successful episodes.</p></div>
       <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3, 32-step evaluation. Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="results-body">
-<tr><th scope="row">rearrange_blocks</th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
-<tr><th scope="row">blocks_ranking_try</th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
-<tr><th scope="row">put_back_block</th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
-<tr><th scope="row">swap_blocks</th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
-<tr><th scope="row">battery_try</th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
-<tr><th scope="row">swap_T</th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
-<tr><th scope="row">cover_blocks</th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
-<tr><th scope="row">observe_and_pickup</th><td>1 / 20</td><td><strong>4 / 100</strong></td></tr>
-<tr><th scope="row">press_button</th><td>1 / 20</td><td><strong>3 / 100</strong></td></tr>
-<tr><th scope="row">place_block_mat</th><td>0 / 20</td><td><strong>2 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Exchange two blocks across three trays using the empty tray, then press the button.</span></th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a><span class="task-description">View a target object, then select and lift the matching object after the target is hidden.</span></th><td>1 / 20</td><td><strong>4 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a><span class="task-description">Press two buttons the number of times shown on their cards, then press a third button to confirm.</span></th><td>1 / 20</td><td><strong>3 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td>0 / 20</td><td><strong>2 / 100</strong></td></tr>
 </tbody><tfoot><tr><th scope="row">All 10 tasks</th><td><strong>67 / 200</strong></td><td><strong>381 / 1,000</strong></td></tr></tfoot></table></div>
-    </section>
-
-<section id="architectures" class="slide" aria-labelledby="architectures-title">
-      
-<div class="section-heading"><h2 id="architectures-title">A, B3/B4, and C3/C4</h2><p>A has no TTT. B retains fast weights across calls; C resets them. Action tokens can attend directly to observer tokens in B4/C4, but not in B3/C3.</p></div>
-      <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
-      <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
-        <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations.</figcaption></figure>
-      </div>
-      <div id="figure-panel-1" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-1" hidden>
-        <figure><a class="diagram-open" href="figures/abc-visible-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B4 · C4 diagram at full size"><img src="figures/abc-visible-overview.svg" width="1920" height="1080" alt="B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference."></a><figcaption>B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference.</figcaption></figure>
-      </div>
-      <div id="figure-panel-2" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-2" hidden>
-        <figure><a class="diagram-open" href="figures/observer-visibility.svg" target="_blank" rel="noopener" aria-label="Open 3 vs. 4 diagram at full size"><img src="figures/observer-visibility.svg" width="1920" height="1080" alt="In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four."></a><figcaption>In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four.</figcaption></figure>
-      </div>
-      <div id="figure-panel-3" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-3" hidden>
-        <figure><a class="diagram-open" href="figures/memory-persistence.svg" target="_blank" rel="noopener" aria-label="Open Carry vs. reset diagram at full size"><img src="figures/memory-persistence.svg" width="1920" height="1080" alt="B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference."></a><figcaption>B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference.</figcaption></figure>
-      </div>
-
-      <div class="table-wrap"><table class="arm-table"><caption>Model settings</caption><thead>
-<tr><th>Arm</th><th>TTT block</th><th>Fast weights across calls</th><th>Direct observer → action attention</th></tr></thead><tbody>
-        
-<tr><th>A</th><td>Absent</td><td>Not applicable</td><td>Not applicable</td></tr>
-        
-<tr><th>B3</th><td>Update + read</td><td>Persist within episode</td><td>Masked</td></tr>
-        
-<tr><th>B4</th><td>Update + read</td><td>Persist within episode</td><td>Allowed</td></tr>
-        
-<tr><th>C3</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Masked</td></tr>
-        
-<tr><th>C4</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Allowed</td></tr>
-      </tbody></table></div>
-      <div class="margin-note full"><span class="note-label">B@reset</span><p><strong>B@reset</strong> resets an already-trained B model only at evaluation. C is trained with resets as well. Reset applies to TTT fast weights; other inputs and position counters remain.</p></div>
-      
-    </section>
-
-<section id="data" class="slide" aria-labelledby="data-title">
-      
-<div class="section-heading"><h2 id="data-title">Data and training</h2></div>
-      <div class="data-overview">
-        <article class="dataset-row" aria-labelledby="rmbench-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10-task B3</p></div>
-          <div class="dataset-content">
-            <p class="dataset-count"><span><strong>45</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>5</strong> held out per task</span></p>
-            <dl class="dataset-facts">
-              <div><dt>Total demonstrations</dt><dd>450 train · 50 held out</dd></div>
-              <div><dt>Training</dt><dd>20,000 updates</dd></div>
-              <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
-              <div><dt>Other 10-task models</dt><dd>C3 and B4 trained; evaluation not yet reported</dd></div>
-            </dl>
-          </div>
-        </article>
-        <article class="dataset-row" aria-labelledby="rmbench-expanded-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>200-demo · 4 tasks</p></div>
-          <div class="dataset-content">
-            <p class="dataset-count"><span><strong>780</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>20</strong> held out in total</span></p>
-            <dl class="dataset-facts">
-              <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
-              <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
-              <div><dt>Training</dt><dd>20,000 updates each</dd></div>
-              <div><dt>Evaluation</dt><dd>Not yet reported</dd></div>
-            </dl>
-          </div>
-        </article>
-        <article class="dataset-row" aria-labelledby="robomme-data-title">
-          <div class="dataset-identity"><h3 id="robomme-data-title">RoboMME</h3><p>VideoUnmask</p></div>
-          <div class="dataset-content">
-            <p class="dataset-count"><span><strong>90</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>10</strong> held out</span></p>
-            <dl class="dataset-facts">
-              <div><dt>Evaluation episodes</dt><dd>20 validation · 50 test</dd></div>
-              <div><dt>Pretrained model</dt><dd>LIBERO Flex-π</dd></div>
-            </dl>
-          </div>
-        </article>
-      </div>
-
     </section>
 
 <section id="case-explorer" class="slide" aria-labelledby="cases-title">
@@ -201,9 +149,85 @@
       
     </section>
 
+<section id="architectures" class="slide" aria-labelledby="architectures-title">
+      
+<div class="section-heading"><h2 id="architectures-title">A, B3/B4, and C3/C4</h2><p>A has no TTT. B retains fast weights across calls; C resets them. Action tokens can attend directly to observer tokens in B4/C4, but not in B3/C3.</p></div>
+      <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
+      <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
+        <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations.</figcaption></figure>
+      </div>
+      <div id="figure-panel-1" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-1" hidden>
+        <figure><a class="diagram-open" href="figures/abc-visible-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B4 · C4 diagram at full size"><img src="figures/abc-visible-overview.svg" width="1920" height="1080" alt="B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference."></a><figcaption>B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference.</figcaption></figure>
+      </div>
+      <div id="figure-panel-2" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-2" hidden>
+        <figure><a class="diagram-open" href="figures/observer-visibility.svg" target="_blank" rel="noopener" aria-label="Open 3 vs. 4 diagram at full size"><img src="figures/observer-visibility.svg" width="1920" height="1080" alt="In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four."></a><figcaption>In B3/C3, direct observer-to-action attention is masked. In B4/C4 it is allowed. TTT writes and reads are active in all four.</figcaption></figure>
+      </div>
+      <div id="figure-panel-3" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-3" hidden>
+        <figure><a class="diagram-open" href="figures/memory-persistence.svg" target="_blank" rel="noopener" aria-label="Open Carry vs. reset diagram at full size"><img src="figures/memory-persistence.svg" width="1920" height="1080" alt="B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference."></a><figcaption>B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference.</figcaption></figure>
+      </div>
+
+      <div class="table-wrap"><table class="arm-table"><caption>Model settings</caption><thead>
+<tr><th>Arm</th><th>TTT block</th><th>Fast weights across calls</th><th>Direct observer → action attention</th></tr></thead><tbody>
+        
+<tr><th>A</th><td>Absent</td><td>Not applicable</td><td>Not applicable</td></tr>
+        
+<tr><th>B3</th><td>Update + read</td><td>Persist within episode</td><td>Masked</td></tr>
+        
+<tr><th>B4</th><td>Update + read</td><td>Persist within episode</td><td>Allowed</td></tr>
+        
+<tr><th>C3</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Masked</td></tr>
+        
+<tr><th>C4</th><td>Update + read</td><td>Reset in training &amp; inference</td><td>Allowed</td></tr>
+      </tbody></table></div>
+      <div class="margin-note full"><span class="note-label">B@reset</span><p><strong>B@reset</strong> resets an already-trained B model only at evaluation. C is trained with resets as well. Reset applies to TTT fast weights; other inputs and position counters remain.</p></div>
+      
+    </section>
+
+<section id="data" class="slide" aria-labelledby="data-title">
+      
+<div class="section-heading"><h2 id="data-title">Data and training</h2></div>
+      <div class="data-overview">
+        <article class="dataset-row" aria-labelledby="rmbench-data-title">
+          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>10-task B3</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><span><strong>45</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>5</strong> held out per task</span></p>
+            <dl class="dataset-facts">
+              <div><dt>Total demonstrations</dt><dd>450 train · 50 held out</dd></div>
+              <div><dt>Training</dt><dd>20,000 updates</dd></div>
+              <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
+              <div><dt>Other 10-task models</dt><dd>C3 and B4 trained; evaluation not yet reported</dd></div>
+            </dl>
+          </div>
+        </article>
+        <article class="dataset-row" aria-labelledby="rmbench-expanded-data-title">
+          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>200-demo · 4 tasks</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><span><strong>780</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>20</strong> held out in total</span></p>
+            <dl class="dataset-facts">
+              <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
+              <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
+              <div><dt>Training</dt><dd>20,000 updates each</dd></div>
+              <div><dt>Evaluation</dt><dd>Not yet reported</dd></div>
+            </dl>
+          </div>
+        </article>
+        <article class="dataset-row" aria-labelledby="robomme-data-title">
+          <div class="dataset-identity"><h3 id="robomme-data-title">RoboMME</h3><p>VideoUnmask</p></div>
+          <div class="dataset-content">
+            <p class="dataset-count"><span><strong>90</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>10</strong> held out</span></p>
+            <dl class="dataset-facts">
+              <div><dt>Evaluation episodes</dt><dd>20 validation · 50 test</dd></div>
+              <div><dt>Pretrained model</dt><dd>LIBERO Flex-π</dd></div>
+            </dl>
+          </div>
+        </article>
+      </div>
+
+    </section>
+
 <section id="controls" class="slide" aria-labelledby="controls-title">
       
-<div class="section-heading"><h2 id="controls-title">Results from earlier runs</h2><p>These models were trained on smaller task groups.</p></div>
+<div class="section-heading"><h2 id="controls-title">Earlier controlled comparisons</h2><p>These models were trained on smaller task groups and evaluated with the earlier 16-step protocol. A has no TTT; B3 retains memory across calls; C3 resets memory during both training and evaluation. B3@reset resets a trained B3 model only during evaluation.</p></div>
       <div class="table-wrap">
         <table class="controls-table">
           <caption class="sr-only">Previously reported controls from distinct experiments</caption>
@@ -211,13 +235,13 @@
 <tr><th scope="col">Experiment</th><th scope="col">Result</th><th scope="col">Notes</th></tr></thead>
           <tbody>
             
-<tr><th scope="row">Original three-task study<span>put_back_block · test</span></th><td><strong>B3: 51 / 100</strong><br>A: 0 / 100 · C3: 0 / 100</td><td>Only B3 succeeds.</td></tr>
+<tr><th scope="row">Original three-task study<span>put_back_block · test</span></th><td><strong>B3: 51 / 100</strong><br>A: 0 / 100 · C3: 0 / 94<br>B3@reset: 0 / 57</td><td>The C3 and B3@reset evaluations are incomplete.</td></tr>
             
-<tr><th scope="row">Four-task study<span>test · 400 episodes</span></th><td><strong>B3: 47 / 400</strong><br>C3: 28 / 400 · A: 27 / 400<br><span class="muted">Same B3 weights, memory reset: 3 / 400</span></td><td>B3 drops from 47 to 3 successes when its memory is reset at evaluation.</td></tr>
+<tr><th scope="row">Four-task study<span>test · 400 episodes</span></th><td><strong>B3: 47 / 400</strong><br>C3: 28 / 400 · A: 27 / 400<br>B3@reset: 3 / 400</td><td>B3 uses step 8,000; B3@reset uses step 2,000. These independently selected checkpoints do not provide a same-weights test of memory reset.</td></tr>
             
-<tr><th scope="row">Later three-task study<span>blocks_ranking_try · validation · 6k</span></th><td><strong>B3: 8 / 20</strong><br>B3 reset: 2 / 20 · C3: 9 / 20</td><td>Reset reduces B3’s score, while C3 scores slightly higher than B3.</td></tr>
+<tr><th scope="row">Later three-task study<span>blocks_ranking_try · test · 6k</span></th><td><strong>B3: 26 / 100</strong><br>C3: 30 / 100 · A: 4 / 100<br>B3@reset: 0 / 100</td><td>Resetting the same B3 weights reduces its score, while C3 scores slightly higher than B3.</td></tr>
             
-<tr><th scope="row">Later three-task study<span>battery_try · test · 6k</span></th><td><strong>B3: 21 / 100</strong><br>A: 17 / 100</td><td>On [1,0]: B3 15/25, A 9/25. On the other two combinations: B3 6/75, A 8/75.</td></tr>
+<tr><th scope="row">Later three-task study<span>battery_try · test · 6k</span></th><td><strong>B3: 21 / 100</strong><br>C3: 23 / 100 · A: 17 / 100<br>B3@reset: 20 / 100</td><td>These results show no clear advantage from retaining memory in this run.</td></tr>
           </tbody>
         </table>
       </div>

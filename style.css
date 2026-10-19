@@ -61,6 +61,11 @@ section, .task-gallery-panel { scroll-margin-top: 32px; }
 .section-heading { margin-bottom: 24px; }
 .section-heading p { margin-top: 12px; max-width: 980px; color: var(--muted); font-size: 20px; line-height: 1.45; }
 .section-heading p strong { color: var(--text); }
+.findings-content { max-width: 980px; }
+.finding + .finding { margin-top: 24px; }
+.finding h3 { font-size: 22px; }
+.finding p { margin-top: 10px; }
+.findings-context { margin-top: 24px; }
 
 /* Tables share one quiet hierarchy: headings, rules, and aligned numbers. */
 .table-wrap { width: 100%; overflow-x: auto; }
@@ -76,6 +81,9 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .results-table th:first-child { width: 54%; }
 .results-table td { width: 23%; }
 .results-table tbody tr:last-child th, .results-table tbody tr:last-child td { border-bottom: 0; }
+.results-table .task-link { text-decoration: none; }
+.results-table .task-link:hover { text-decoration: underline; }
+.task-description { display: block; max-width: 590px; margin-top: 5px; color: var(--muted); font-size: 17px; line-height: 1.4; }
 .arm-table { margin-top: 26px; }
 .arm-table th:first-child { width: 10%; }
 .controls-table { min-width: 700px; }
@@ -159,6 +167,8 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
   .slide, .slide:first-child { padding-block: 36px; }
   .section-heading { margin-bottom: 22px; }
   .section-heading p { font-size: 18px; }
+  .finding h3 { font-size: 20px; }
+  .task-description { font-size: 16px; }
   table { font-size: 16px; }
   th, td { padding: 10px 8px; }
   .results-table th:first-child { width: 50%; overflow-wrap: anywhere; }
