@@ -3,86 +3,18 @@
 
   const slides = [...document.querySelectorAll('.slide')];
   const navLinks = [...document.querySelectorAll('.section-nav a')];
-  const presentToggle = document.querySelector('#present-toggle');
-  const presentationControls = document.querySelector('.presentation-controls');
-  const previous = document.querySelector('#slide-prev');
-  const next = document.querySelector('#slide-next');
-  const counter = document.querySelector('#slide-counter');
-  const liveStatus = document.querySelector('#interaction-status');
-  let currentSlide = 0;
-  let presenting = false;
-  let savedScrollPosition = 0;
-
   function updateNavigation(index) {
-    currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+    const currentSlide = Math.max(0, Math.min(index, slides.length - 1));
     navLinks.forEach((link, i) => {
       link.classList.toggle('active', i === currentSlide);
       if (i === currentSlide) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
-    counter.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
-    previous.disabled = currentSlide === 0;
-    next.disabled = currentSlide === slides.length - 1;
   }
-
-  function showSlide(index) {
-    const target = Math.max(0, Math.min(index, slides.length - 1));
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('current-slide', i === target);
-      if (i !== target) slide.querySelectorAll('video').forEach(video => video.pause());
-    });
-    updateNavigation(target);
-    if (presenting) {
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      liveStatus.textContent = `Section ${target + 1} of ${slides.length}: ${slides[target].querySelector('h1, h2').textContent}`;
-    }
-  }
-
-  presentToggle.addEventListener('click', () => {
-    presenting = !presenting;
-    if (presenting) savedScrollPosition = window.scrollY;
-    document.body.classList.toggle('presenting', presenting);
-    presentationControls.hidden = !presenting;
-    presentToggle.setAttribute('aria-pressed', String(presenting));
-    presentToggle.innerHTML = `<span class="present-icon" aria-hidden="true"></span>${presenting ? 'Exit' : 'Present'}`;
-    if (presenting) showSlide(currentSlide);
-    else {
-      slides.forEach(slide => slide.classList.remove('current-slide'));
-      window.scrollTo({ top: savedScrollPosition, behavior: 'instant' });
-    }
-  });
-
-  previous.addEventListener('click', () => showSlide(currentSlide - 1));
-  next.addEventListener('click', () => showSlide(currentSlide + 1));
-  navLinks.forEach((link, index) => {
-    link.addEventListener('click', event => {
-      if (presenting) {
-        event.preventDefault();
-        showSlide(index);
-      }
-    });
-  });
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    if (navLinks.includes(link)) return;
-    link.addEventListener('click', event => {
-      if (!presenting) return;
-      const index = slides.findIndex(slide => `#${slide.id}` === link.getAttribute('href'));
-      if (index >= 0) { event.preventDefault(); showSlide(index); }
-    });
-  });
-
-  document.addEventListener('keydown', event => {
-    if (!presenting) return;
-    const active = document.activeElement;
-    if (active && (active.matches('video, input, textarea, select, [contenteditable="true"]') || active.closest('[role="tablist"]'))) return;
-    if (event.key === 'Escape') { event.preventDefault(); presentToggle.click(); }
-    else if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); showSlide(currentSlide + 1); }
-    else if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); showSlide(currentSlide - 1); }
-  });
 
   let scrollQueued = false;
   function trackCurrentSection() {
-    if (presenting || scrollQueued) return;
+    if (scrollQueued) return;
     scrollQueued = true;
     requestAnimationFrame(() => {
       const marker = Math.min(window.innerHeight * 0.35, 240);

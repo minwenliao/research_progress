@@ -26,7 +26,6 @@
 <a href="#robomme" aria-label="06 RoboMME VideoUnmask" title="RoboMME VideoUnmask">06</a>
 <a href="#controls" aria-label="07 Earlier experiments" title="Earlier experiments">07</a>
 </nav>
-        <button id="present-toggle" class="button small" type="button" aria-pressed="false"><span class="present-icon" aria-hidden="true"></span>Present</button>
       </div>
     </div>
   </header>
@@ -197,7 +196,7 @@
       
 <div class="section-marker"><span>06 / RoboMME VideoUnmask</span><span>Earlier 6k runs · test episode 005</span></div>
       
-<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2><p>A and C3 time out. B3 and B3@reset both succeed, so this episode does not show a benefit from retaining memory across calls.</p></div>
+<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2></div>
       <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">4k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">6k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object. Recorded outcome: success.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot failure" aria-hidden="true"></span>Timeout</span><code>test / 005</code></div><h3>C3 · reset in training + test</h3><p class="clip-provenance">2k selected checkpoint</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span><span class="outcome-dot success" aria-hidden="true"></span>Success</span><code>test / 005</code></div><h3>B3 · reset only at evaluation</h3><p class="clip-provenance">Same B3 weights · 6k</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully with the same B3 weights and memory reset.</figcaption></figure></div>
       <div class="video-toolbar"><button id="robomme-play" class="button primary" type="button">Play all from the start</button><span id="robomme-status" role="status"></span></div>
       
@@ -229,7 +228,5 @@
     </section>
 
   </main>
-  <div class="presentation-controls" aria-label="Presentation navigation" hidden><button id="slide-prev" type="button" aria-label="Previous section">←</button><span id="slide-counter" aria-live="polite">01 / 07</span><button id="slide-next" type="button" aria-label="Next section">→</button><span class="presentation-hint">Arrow keys to navigate · Esc to exit</span></div>
-  <div id="interaction-status" class="sr-only" role="status" aria-live="polite"></div>
 </body>
 </html>
