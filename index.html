@@ -40,6 +40,15 @@
           <h3 id="finding-memory">Memory content guides the return location</h3>
           <p>Replacing memory with another episode’s memory redirected the robot toward that episode’s starting mat in <strong>8/8</strong> block-return trials. This intervention provides causal evidence that stored episode information influences target selection in this task; the success rate alone would not establish that.</p>
         </article>
+        <article class="finding" aria-labelledby="finding-persistence">
+          <h3 id="finding-persistence">Retaining history helps when blocks must return to earlier locations</h3>
+          <p>In the 200-demo runs, TTT memory achieves <strong>20/20</strong> on <a href="#update-put_back_block">block return</a> and <strong>8/20</strong> on <a href="#update-place_block_mat">multiple-block return</a>, versus <strong>7/20</strong> and <strong>0/20</strong> for <strong>w/o persistent memory</strong>, which resets TTT state during both training and evaluation. <a href="#update-swap_blocks">Block swapping</a> is closer: <strong>17/20 vs. 15/20</strong>. The clearest benefits here are on tasks requiring a return to an earlier location; persistent memory does not improve every task equally.</p>
+        </article>
+        <article class="finding" aria-labelledby="finding-train-eval">
+          <h3 id="finding-train-eval">Training with memory can make a policy depend on it at evaluation</h3>
+          <p>In the <a href="#controls">earlier reported 16-step block-ordering comparison</a>, resetting the same 6k checkpoint only at evaluation drops success from <strong>26/100 to 0/100</strong>. A separate model trained and evaluated with resets reaches <strong>30/100</strong>. The trained policy depends on its accumulated memory, while a policy trained under reset can still succeed. This makes training-time memory behavior part of the evaluation protocol.</p>
+          <p>These ablations test <strong>retention across calls</strong>. All TTT variants still update and read within each call, so they do not establish that disabling updates during either training or evaluation causes failure.</p>
+        </article>
         <article class="finding" aria-labelledby="finding-scaling">
           <h3 id="finding-scaling">Transfers improve with expanded training; ordered uncovering remains difficult</h3>
           <p>With 200 demos/task (≈195 training), <a href="#panel-swap_blocks">block swapping</a> rises from <strong>6/20 to 17/20</strong> and <a href="#panel-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task (495 training), <a href="#panel-swap_T">T-block swapping</a> rises from <strong>2/20 to 16/20</strong>, while <a href="#panel-put_back_block">block return</a> reaches <strong>20/20</strong>. These gains suggest that more task-specific training can address some of the low-data failures.</p>
