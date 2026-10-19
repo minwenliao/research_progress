@@ -29,22 +29,22 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>We add test-time training (TTT) memory to Flex-π to test whether earlier observations guide later actions.</p>
+        <p>We add test-time training (TTT) memory to pretrained Flex-π to test whether earlier observations guide later actions.</p>
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-performance">
-          <h3 id="finding-performance">45 training demos per task</h3>
-          <p>The ten-task model with persistent TTT memory achieves <strong>95%</strong> on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on block return. Overall test success is <strong>38.1% (381/1,000)</strong>.</p>
+          <h3 id="finding-performance">Performance is uneven across tasks</h3>
+          <p>With 45 training demos per task, success reaches <strong>95%</strong> on block rearrangement, <strong>94%</strong> on block ordering, and <strong>84%</strong> on block return, but only <strong>38.1%</strong> overall. The model learns several manipulation sequences reliably from few demonstrations, while hidden-target selection (<strong>4%</strong>) and counting (<strong>3%</strong>) remain weak. High success on individual tasks does not establish reliable use of past cues across the benchmark.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">Swapping memory redirects the robot</h3>
-          <p>In <strong>8/8</strong> block-return trials, replacing memory with another episode’s memory made the robot carry the block toward that episode’s starting mat.</p>
+          <h3 id="finding-memory">Memory content guides the return location</h3>
+          <p>Replacing memory with another episode’s memory redirected the robot toward that episode’s starting mat in <strong>8/8</strong> block-return trials. This intervention provides causal evidence that stored episode information influences target selection in this task; the success rate alone would not establish that.</p>
         </article>
         <article class="finding" aria-labelledby="finding-scaling">
-          <h3 id="finding-scaling">Larger-data validation results</h3>
-          <p><strong>200 demos/task (≈195 training):</strong> <a href="#panel-swap_blocks">block swapping</a> <strong>6/20→17/20</strong>, <a href="#panel-place_block_mat">multiple-block return</a> <strong>0/20→8/20</strong>, and <a href="#panel-put_back_block">block return</a> <strong>16/20→20/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> stays at <strong>1/20</strong>.</p>
-          <p><strong>500 demos/task (495 training):</strong> <a href="#panel-swap_T">T-block swapping</a> <strong>2/20→16/20</strong>; block return <strong>20/20</strong>.</p>
-          <p>Compared with the 45-demo model on the same 20 validation seeds per task. All runs use 20k updates, but task groups change from 10 to 4 to 2, so data volume is not the only difference.</p>
+          <h3 id="finding-scaling">Transfers improve with expanded training; ordered uncovering remains difficult</h3>
+          <p>With 200 demos/task (≈195 training), <a href="#panel-swap_blocks">block swapping</a> rises from <strong>6/20 to 17/20</strong> and <a href="#panel-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task (495 training), <a href="#panel-swap_T">T-block swapping</a> rises from <strong>2/20 to 16/20</strong>, while <a href="#panel-put_back_block">block return</a> reaches <strong>20/20</strong>. These gains suggest that more task-specific training can address some of the low-data failures.</p>
+          <p><a href="#panel-cover_blocks">Ordered uncovering</a> stays at <strong>1/20</strong> with 200 demos, despite successful covering in <strong>20/20</strong> episodes. This localizes the remaining difficulty to uncovering the blocks in the required color order: adding demonstrations has not yet resolved that stage.</p>
+          <p>Comparisons use the same 20 validation seeds per task and 20k training updates. Task groups also change from 10 to 4 to 2, so the gains cannot be attributed to data volume alone.</p>
         </article>
       </div>
     </section>
