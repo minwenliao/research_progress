@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Flex-π + TTT research progress: manipulation with 45 training demonstrations per task, memory interventions, and limitations in using brief target cues.">
-  <title>Flex-π + TTT experiments — 18 Oct 2026 — Minwen Liao</title>
+  <meta name="description" content="Flex-π + TTT research progress: task success with 45, approximately 195, and 495 training demonstrations per task, and memory interventions.">
+  <title>Flex-π + TTT experiments — 19 Oct 2026 — Minwen Liao</title>
   <link rel="stylesheet" href="style.css?v=20261019-500-demo">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
@@ -14,7 +14,7 @@
   <a class="skip-link" href="#main">Skip to research update</a>
   <header class="report-header" id="question">
     <h1>Flex-π + TTT experiments</h1>
-    <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-18">18 October 2026</time></p>
+    <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-19">19 October 2026</time></p>
     <nav class="section-nav" aria-label="Research sections">
       <a href="#findings">Main findings</a>
       <a href="#results">RMBench results</a>
@@ -40,10 +40,11 @@
           <h3 id="finding-memory">Memory content influences which mat the robot chooses</h3>
           <p>The block-return task requires the robot to move a block away and then return it to its original mat. In an earlier experiment, we replaced the robot’s memory with memory from another episode, where the block had started on a different mat. In all eight memory-swap trials, the robot carried the block toward that other episode’s starting mat. This intervention shows that stored episode information influences target selection in this task.</p>
         </article>
-        <article class="finding" aria-labelledby="finding-limitations">
-          <h3 id="finding-limitations">Object selection, counting, and repeated transfers remain difficult</h3>
-          <p>Success remains <strong>4%</strong> when selecting a previously shown target, <strong>3%</strong> when pressing buttons the instructed number of times, and <strong>2%</strong> when moving and returning multiple blocks. In the failures examined, the robot selects the wrong object, misses a grasp, places an object at the wrong angle, or presses a button too many times. Separate four-task runs with more demonstrations improve validation performance on block return, block swapping, and repeated transfers; results and matched validation comparisons are reported below.</p>
-          <p>In the object-selection episodes examined, changing the initially displayed target did not change the object chosen, even at the first decision after the target was hidden. We do not yet know whether the model fails to store the target’s identity or fails to use that information when choosing an object.</p>
+        <article class="finding" aria-labelledby="finding-scaling">
+          <h3 id="finding-scaling">Larger-data runs improve validation success on several tasks</h3>
+          <p>With 200 demonstrations per task (approximately 195 for training), the four-task B3 model improves <a href="#panel-swap_blocks">block swapping</a> from <strong>6/20 to 17/20</strong>, <a href="#panel-place_block_mat">moving and returning multiple blocks</a> from <strong>0/20 to 8/20</strong>, and <a href="#panel-put_back_block">block return</a> from <strong>16/20 to 20/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> remains at <strong>1/20</strong>.</p>
+          <p>With 500 demonstrations per task (495 for training), the two-task B3 model improves <a href="#panel-swap_T">T-block swapping</a> from <strong>2/20 to 16/20</strong> and reaches <strong>20/20</strong> on block return, matching the 200-demo result.</p>
+          <p>These comparisons use the same 20 validation seeds per task, with the original ten-task, 45-training-demo B3 model as the baseline. All runs train for 20,000 updates, but the task mix and training exposure per task also change, so the gains cannot be attributed to data volume alone. The original 100-episode test results are reported separately below.</p>
         </article>
       </div>
     </section>
