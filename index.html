@@ -29,24 +29,24 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>We study whether test-time training (TTT) memory helps Flex-π use earlier observations to guide later actions. In our ten-task baseline, each task has 50 demonstrations: 45 for training and five held out. The model, trained jointly on all ten tasks with persistent memory, achieves 38.1% success across 100 test episodes per task (1,000 total), including 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
+        <p>We study whether test-time training (TTT) memory helps Flex-π use past observations to guide later actions. Our ten-task baseline uses 50 demonstrations per task (45 for training, five held out) and achieves 38.1% success over 1,000 test episodes (100 per task), with 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-scaling">
-          <h3 id="finding-scaling">More training data improves success on several tasks, but not all</h3>
-          <p>With 200 demonstrations per task, <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multi-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demonstrations per task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. More data improves several tasks, but the robot still struggles to uncover the blocks in the required order.</p>
+          <h3 id="finding-scaling">More data improves several tasks, but ordered uncovering remains difficult</h3>
+          <p>With 200 demonstrations per task, validation success rises from <strong>6/20 to 17/20</strong> on <a href="#update-swap_blocks">block swapping</a> and <strong>0/20 to 8/20</strong> on <a href="#update-place_block_mat">multi-block return</a>. With 500 demonstrations per task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> remains at <strong>1/20</strong> with 200 demonstrations, despite successful covering in <strong>20/20</strong> episodes.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
-          <h3 id="finding-persistence">Retaining memory helps some tasks; clearing it at test time can disrupt a learned policy</h3>
-          <p>With 200 demonstrations per task, the model with persistent memory succeeds in <strong>20/20</strong> <a href="#update-put_back_block">block-return</a> episodes, compared with <strong>7/20</strong> for the model trained and evaluated with memory reset at every policy call. On <a href="#update-place_block_mat">multi-block return</a>, the corresponding results are <strong>8/20</strong> and <strong>0/20</strong>. In the <a href="#controls">earlier 16-step block-ordering study</a>, resetting memory only during evaluation reduces the same 6,000-update checkpoint’s success from <strong>26/100 to 0/100</strong>. A policy trained to retain history can depend on that history at test time.</p>
+          <h3 id="finding-persistence">Retaining memory helps return tasks; clearing it can disrupt a learned policy</h3>
+          <p>With 200 demonstrations per task, retaining memory during training and evaluation outperforms resetting it at every policy call on <a href="#update-put_back_block">block return</a> (<strong>20/20 vs. 7/20</strong>) and <a href="#update-place_block_mat">multi-block return</a> (<strong>8/20 vs. 0/20</strong>). In the <a href="#controls">earlier 16-step block-ordering study</a>, resetting memory only during evaluation reduces the same 6,000-update checkpoint’s success from <strong>26/100 to 0/100</strong>.</p>
         </article>
         <article class="finding" aria-labelledby="finding-cue-use">
-          <h3 id="finding-cue-use">The model stores target information but does not use it to choose an object</h3>
-          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, we can tell which target was shown from the model’s memory with <strong>85% accuracy</strong> on unseen scenes. At the first decision after the target is hidden, swapping in memory of a different target leaves the robot choosing the same object in <strong>all 148 paired tests</strong>. Making the memory output 2 or 5 times stronger does not help.</p>
+          <h3 id="finding-cue-use">Stored target information does not guide object selection</h3>
+          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, an independent decoder identifies the shown target from memory with <strong>85% accuracy</strong> on unseen scenes. At the first decision after the target is hidden, swapping in memory of a different target changes the chosen object in <strong>0/148 paired tests</strong>, with all other inputs fixed. Amplifying the memory output by 2× or 5× does not help.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">Changing memory content changes where the robot returns the block</h3>
-          <p>In the earlier <a href="#panel-put_back_block">block-return experiment</a>, the robot must return a block to its original mat. Before the return decision, we replace its memory with memory from another episode in which the block started on a different mat, while keeping the model weights and current observation fixed. All eight trials succeed with their original memory. After the swap, the robot moves the block toward the other episode’s starting mat in <strong>8/8 trials</strong>. This shows that remembered starting-location information can causally influence the robot’s return target.</p>
+          <h3 id="finding-memory">Swapping memory redirects the robot’s return target</h3>
+          <p>In the earlier <a href="#panel-put_back_block">block-return experiment</a>, the robot should return the block to its starting mat, <strong>A</strong>. Keeping the model and current observation fixed, we swap in memory from a trial where the block started on mat <strong>B</strong>. All eight trials succeed with their original memory; after the swap, the robot moves the block toward <strong>B in 8/8 trials</strong>.</p>
         </article>
       </div>
     </section>
