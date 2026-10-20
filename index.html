@@ -33,16 +33,16 @@
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-scaling">
-          <h3 id="finding-scaling">More data improves several tasks, but ordered uncovering remains difficult</h3>
-          <p>With 200 demonstrations per task, validation success rises from <strong>6/20 to 17/20</strong> on <a href="#update-swap_blocks">block swapping</a> and <strong>0/20 to 8/20</strong> on <a href="#update-place_block_mat">multi-block return</a>. With 500 demonstrations per task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. <a href="#panel-cover_blocks">Ordered uncovering</a> remains at <strong>1/20</strong> with 200 demonstrations, despite successful covering in <strong>20/20</strong> episodes.</p>
+          <h3 id="finding-scaling">More training data improves success on several tasks</h3>
+          <p>With 200 demonstrations per task, validation success rises from <strong>6/20 to 17/20</strong> on <a href="#update-swap_blocks">block swapping</a> and <strong>0/20 to 8/20</strong> on <a href="#update-place_block_mat">multi-block return</a>. With 500 demonstrations per task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. In <a href="#panel-cover_blocks">cover_blocks</a>, success remains at <strong>1/20</strong>: the robot covers the blocks in <strong>20/20</strong> episodes but rarely uncovers them in the required color order.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
-          <h3 id="finding-persistence">Retaining memory helps return tasks; clearing it can disrupt a learned policy</h3>
+          <h3 id="finding-persistence">Memory helps the robot return blocks to their original locations</h3>
           <p>With 200 demonstrations per task, retaining memory during training and evaluation outperforms resetting it at every policy call on <a href="#update-put_back_block">block return</a> (<strong>20/20 vs. 7/20</strong>) and <a href="#update-place_block_mat">multi-block return</a> (<strong>8/20 vs. 0/20</strong>). In the <a href="#controls">earlier 16-step block-ordering study</a>, resetting memory only during evaluation reduces the same 6,000-update checkpoint’s success from <strong>26/100 to 0/100</strong>.</p>
         </article>
         <article class="finding" aria-labelledby="finding-cue-use">
-          <h3 id="finding-cue-use">Stored target information does not guide object selection</h3>
-          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, an independent decoder identifies the shown target from memory with <strong>85% accuracy</strong> on unseen scenes. At the first decision after the target is hidden, swapping in memory of a different target changes the chosen object in <strong>0/148 paired tests</strong>, with all other inputs fixed. Amplifying the memory output by 2× or 5× does not help.</p>
+          <h3 id="finding-cue-use">The model stores the target cue but fails to use it</h3>
+          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, the robot sees a target object and must pick its match after the target is hidden. A separate decoder identifies the target with <strong>85% accuracy</strong> on unseen scenes, using memory recorded just after viewing. Yet swapping in memory of a different target leaves the chosen object unchanged in <strong>all 148 paired tests</strong> at the first decision after hiding, with all other inputs and sampling noise fixed. Making the memory output 2 or 5 times stronger does not improve target selection.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
           <h3 id="finding-memory">Swapping memory redirects the robot’s return target</h3>
