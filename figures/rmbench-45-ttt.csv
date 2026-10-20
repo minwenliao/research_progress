@@ -1,0 +1,10 @@
+task,training_demos_per_task,without_ttt_success_percent,with_ttt_success_percent,difference_percentage_points
+rearrange_blocks,45,60,95,35
+blocks_ranking_try,45,0,94,94
+put_back_block,45,40,84,44
+swap_blocks,45,0,52,52
+battery_try,45,20,31,11
+swap_T,45,0,10,10
+cover_blocks,45,40,6,-34
+observe_and_pickup,45,40,4,-36
+press_button,45,0,3,3
