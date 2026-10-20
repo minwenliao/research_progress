@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT research progress: task success with 50, 200, and 500 demonstrations per task, and memory interventions.">
-  <title>Flex-π + TTT experiments — 19 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261019-ttt-comparison">
+  <title>Flex-π + TTT experiments — 20 Oct 2026 — Minwen Liao</title>
+  <link rel="stylesheet" href="style.css?v=20261020-final-baseline">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to research update</a>
   <header class="report-header" id="question">
     <h1>Flex-π + TTT experiments</h1>
-    <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-19">19 October 2026</time></p>
+    <p class="report-byline"><a href="https://minwenliao.github.io/">Minwen Liao</a> · <time datetime="2026-10-20">20 October 2026</time></p>
     <nav class="section-nav" aria-label="Research sections">
       <a href="#findings">Main findings</a>
       <a href="#results">RMBench results</a>
@@ -30,7 +30,7 @@
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
         <p>Test-time training (TTT) memory can guide Flex-π’s later decisions. However, in some settings, the model stores relevant information without using it to guide target selection. Our experiments examine how training scale, memory retention, and memory content affect behavior.</p>
-        <p>Our ten-task baseline uses 50 demonstrations per task (45 for training, five held out) and achieves 38.1% success over 1,000 test episodes (100 per task), with 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
+        <p>With 45 training demonstrations per task (plus five held out), adding TTT raises ten-task test success from <strong>6.5% to 38.1%</strong> (<strong>+31.6 percentage points</strong>). Both models train for 20,000 updates on the same demonstrations and are evaluated on the same 100 test seeds per task. The largest gains are in block ordering, rearrangement, and return.</p>
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-scaling">
@@ -57,56 +57,74 @@
       </div>
       <p class="results-scroll-hint">Scroll horizontally to view all results.</p>
       <div class="table-wrap results-scroll" tabindex="0" role="region" aria-label="RMBench success with and without TTT across training sets"><table class="results-table data-comparison">
-        <caption class="sr-only">Earlier Flex-π results without TTT, using 45 training demonstrations per task, alongside B3 results with TTT at 45, 195, and 495 training demonstrations per task. B3 uses 100 test episodes per task at 45 training demonstrations and 20 validation episodes per task in the larger runs. Earlier no-TTT evaluation counts were not recorded in the supplied results.</caption>
-        <thead><tr><th scope="col">Task</th><th scope="col">w/o TTT<span class="result-setting">45 train<br>Earlier results</span></th><th scope="col">50 demos<span class="result-setting">w/ TTT · 45 train<br>10 tasks · Test<br>100 episodes</span></th><th scope="col">200 demos<span class="result-setting">w/ TTT · 195 train<br>4 tasks · Validation<br>20 episodes</span></th><th scope="col">500 demos<span class="result-setting">w/ TTT · 495 train<br>2 tasks · Validation<br>20 episodes</span></th></tr></thead>
+        <caption class="sr-only">Final ten-task results with and without TTT at 45 training demonstrations per task, each evaluated on the same 100 test seeds per task, alongside B3 validation results at 195 and 495 training demonstrations per task.</caption>
+        <thead><tr><th scope="col">Task</th><th scope="col">w/o TTT<span class="result-setting">45 train<br>10 tasks · Test<br>100 episodes</span></th><th scope="col">50 demos<span class="result-setting">w/ TTT · 45 train<br>10 tasks · Test<br>100 episodes</span></th><th scope="col">200 demos<span class="result-setting">w/ TTT · 195 train<br>4 tasks · Validation<br>20 episodes</span></th><th scope="col">500 demos<span class="result-setting">w/ TTT · 495 train<br>2 tasks · Validation<br>20 episodes</span></th></tr></thead>
         <tbody id="results-body">
-<tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td><strong>60%</strong></td><td><strong>95%</strong><span class="result-count">95 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td><strong>0%</strong></td><td><strong>94%</strong><span class="result-count">94 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td><strong>40%</strong></td><td><strong>84%</strong><span class="result-count">84 / 100</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Swap the positions of two blocks using a third, empty tray, then press the button.</span></th><td><strong>0%</strong></td><td><strong>52%</strong><span class="result-count">52 / 100</span></td><td><strong>85%</strong><span class="result-count">17 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td><strong>20%</strong></td><td><strong>31%</strong><span class="result-count">31 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td><strong>0%</strong></td><td><strong>10%</strong><span class="result-count">10 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td><strong>80%</strong><span class="result-count">16 / 20</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td><strong>40%</strong></td><td><strong>6%</strong><span class="result-count">6 / 100</span></td><td><strong>5%</strong><span class="result-count">1 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a><span class="task-description">View a target object, then select and lift the matching object after the target is hidden.</span></th><td><strong>40%</strong></td><td><strong>4%</strong><span class="result-count">4 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a><span class="task-description">Press two buttons the number of times shown on their cards, then press a third button to confirm.</span></th><td><strong>0%</strong></td><td><strong>3%</strong><span class="result-count">3 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td class="result-unavailable"><span aria-label="No earlier baseline result available">—</span></td><td><strong>2%</strong><span class="result-count">2 / 100</span></td><td><strong>40%</strong><span class="result-count">8 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td><strong>10%</strong><span class="result-count">10 / 100</span></td><td><strong>95%</strong><span class="result-count">95 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td><strong>2%</strong><span class="result-count">2 / 100</span></td><td><strong>94%</strong><span class="result-count">94 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td><strong>6%</strong><span class="result-count">6 / 100</span></td><td><strong>84%</strong><span class="result-count">84 / 100</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Swap the positions of two blocks using a third, empty tray, then press the button.</span></th><td><strong>5%</strong><span class="result-count">5 / 100</span></td><td><strong>52%</strong><span class="result-count">52 / 100</span></td><td><strong>85%</strong><span class="result-count">17 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td><strong>24%</strong><span class="result-count">24 / 100</span></td><td><strong>31%</strong><span class="result-count">31 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td><strong>13%</strong><span class="result-count">13 / 100</span></td><td><strong>10%</strong><span class="result-count">10 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td><strong>80%</strong><span class="result-count">16 / 20</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td><strong>0%</strong><span class="result-count">0 / 100</span></td><td><strong>6%</strong><span class="result-count">6 / 100</span></td><td><strong>5%</strong><span class="result-count">1 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a><span class="task-description">View a target object, then select and lift the matching object after the target is hidden.</span></th><td><strong>5%</strong><span class="result-count">5 / 100</span></td><td><strong>4%</strong><span class="result-count">4 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a><span class="task-description">Press two buttons the number of times shown on their cards, then press a third button to confirm.</span></th><td><strong>0%</strong><span class="result-count">0 / 100</span></td><td><strong>3%</strong><span class="result-count">3 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td><strong>0%</strong><span class="result-count">0 / 100</span></td><td><strong>2%</strong><span class="result-count">2 / 100</span></td><td><strong>40%</strong><span class="result-count">8 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
         </tbody>
       </table></div>
-      <p class="results-context">All counts are per task. The three w/ TTT runs reserve five demonstrations, leaving 45, 195, or 495 for training; each trains for 20,000 updates and executes 32 action steps per policy call. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means no result is available in that column.</p>
+      <p class="results-context">All counts are per task. Each run reserves five demonstrations and trains for 20,000 updates, with 32 action steps executed per policy call. The 45-demo models use the same training episodes, normalizer, and evaluation seeds. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means no result is available in that column.</p>
       <div id="ttt-comparison" class="ttt-comparison" aria-labelledby="ttt-comparison-title">
         <h3 id="ttt-comparison-title">With and without TTT</h3>
-        <p class="comparison-subtitle">45 training demonstrations per task · nine shared tasks</p>
+        <p class="comparison-subtitle">45 training demonstrations per task · 20,000 updates · 100 test episodes per task</p>
         <figure class="ttt-chart">
           <picture>
-            <source media="(max-width: 600px)" srcset="figures/rmbench-45-ttt-mobile.svg">
-            <img src="figures/rmbench-45-ttt.svg" width="1152" height="670" loading="lazy" alt="Grouped bar chart comparing success rates without and with TTT on nine tasks, using the values in the table above. Seven task scores increase and two decrease.">
+            <source media="(max-width: 600px)" srcset="figures/rmbench-45-ttt-mobile.svg?v=20261020-final">
+            <img src="figures/rmbench-45-ttt.svg?v=20261020-final" width="1152" height="730" loading="lazy" alt="Grouped bar chart comparing final test success without and with TTT on all ten tasks. Eight task scores increase and two decrease; mean success rises from 6.5% to 38.1%.">
           </picture>
-          <figcaption>Success improves on seven of nine tasks, with the largest gains in block ordering, swapping, and return. Observe-and-pickup and ordered uncovering score lower.</figcaption>
+          <figcaption>TTT improves success on eight of ten tasks, with the largest gains in block ordering (+92 points), rearrangement (+85), and return (+78). Both models remain weak on observe-and-pickup and T-block swapping.</figcaption>
         </figure>
         <div class="table-wrap">
           <table class="baseline-summary">
-            <caption>Mean success · nine shared tasks</caption>
+            <caption>Mean test success · all ten tasks</caption>
             <thead><tr><th scope="col">w/o TTT</th><th scope="col">w/ TTT</th><th scope="col">Change</th></tr></thead>
-            <tbody><tr><td><strong>22.2%</strong></td><td><strong>42.1%</strong></td><td><strong>+19.9</strong><span>percentage points</span></td></tr></tbody>
+            <tbody><tr><td><strong>6.5%</strong><span>65 / 1,000</span></td><td><strong>38.1%</strong><span>381 / 1,000</span></td><td><strong>+31.6</strong><span>percentage points</span></td></tr></tbody>
           </table>
         </div>
       </div>
       <details class="test-results">
-        <summary>Original ten-task results · 38.1% test success</summary>
-        <p>B3 with 45 training demonstrations per task: <strong>381 / 1,000</strong> test successes. Validation and test episodes are separate simulation runs, not the held-out expert demonstrations.</p>
-      <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3 with 32-step execution: successes out of 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="original-results-body">
-<tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Swap the positions of two blocks using a third, empty tray, then press the button.</span></th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a><span class="task-description">View a target object, then select and lift the matching object after the target is hidden.</span></th><td>1 / 20</td><td><strong>4 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a><span class="task-description">Press two buttons the number of times shown on their cards, then press a third button to confirm.</span></th><td>1 / 20</td><td><strong>3 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td>0 / 20</td><td><strong>2 / 100</strong></td></tr>
-</tbody><tfoot><tr><th scope="row">All 10 tasks</th><td><strong>67 / 200</strong></td><td><strong>381 / 1,000</strong></td></tr></tfoot></table></div>
+        <summary>Full ten-task comparison · validation and test</summary>
+        <p>Both models use 45 training demonstrations per task, 20,000 updates, the same RoboTwin base, and matching evaluation settings. Validation and test episodes are separate simulation runs, not the five held-out expert demonstrations.</p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Complete ten-task validation and test comparison"><table class="results-table final-results final-comparison">
+          <caption class="sr-only">Final no-TTT A and TTT B3 results: 20 validation and 100 test episodes per task</caption>
+          <thead><tr><th scope="col">Task</th><th scope="col">w/o TTT<span class="result-setting">Validation</span></th><th scope="col">w/ TTT<span class="result-setting">Validation</span></th><th scope="col">w/o TTT<span class="result-setting">Test</span></th><th scope="col">w/ TTT<span class="result-setting">Test</span></th></tr></thead>
+          <tbody id="original-results-body">
+<tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a></th><td>3 / 20</td><td>18 / 20</td><td><strong>10 / 100</strong></td><td><strong>95 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a></th><td>1 / 20</td><td>18 / 20</td><td><strong>2 / 100</strong></td><td><strong>94 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a></th><td>0 / 20</td><td>16 / 20</td><td><strong>6 / 100</strong></td><td><strong>84 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a></th><td>0 / 20</td><td>6 / 20</td><td><strong>5 / 100</strong></td><td><strong>52 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a></th><td>5 / 20</td><td>4 / 20</td><td><strong>24 / 100</strong></td><td><strong>31 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a></th><td>1 / 20</td><td>2 / 20</td><td><strong>13 / 100</strong></td><td><strong>10 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a></th><td>0 / 20</td><td>1 / 20</td><td><strong>0 / 100</strong></td><td><strong>6 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a></th><td>0 / 20</td><td>1 / 20</td><td><strong>5 / 100</strong></td><td><strong>4 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a></th><td>0 / 20</td><td>1 / 20</td><td><strong>0 / 100</strong></td><td><strong>3 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a></th><td>0 / 20</td><td>0 / 20</td><td><strong>0 / 100</strong></td><td><strong>2 / 100</strong></td></tr>
+          </tbody><tfoot><tr><th scope="row">All 10 tasks</th><td><strong>5.0%</strong><span class="result-count">10 / 200</span></td><td><strong>33.5%</strong><span class="result-count">67 / 200</span></td><td><strong>6.5%</strong><span class="result-count">65 / 1,000</span></td><td><strong>38.1%</strong><span class="result-count">381 / 1,000</span></td></tr></tfoot>
+        </table></div>
       </details>
+      <div id="results-500-test" class="additional-results" aria-labelledby="results-500-test-title">
+        <h3 id="results-500-test-title">500-demo test results</h3>
+        <p class="comparison-subtitle">495 training demonstrations per task · 20,000 updates · 100 test episodes per task</p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="500-demo B3 and B4 test results"><table class="results-table large-data-test">
+          <caption class="sr-only">Test success for the two-task B3 and three-task B4 models at 500 demonstrations per task</caption>
+          <thead><tr><th scope="col">Task</th><th scope="col">TTT memory<span class="result-setting">B3 · 2 tasks</span></th><th scope="col">w/ direct observer attention<span class="result-setting">B4 · 3 tasks</span></th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a></th><td><strong>80%</strong><span class="result-count">80 / 100</span></td><td><strong>42%</strong><span class="result-count">42 / 100</span></td></tr>
+            <tr><th scope="row"><a class="task-link" href="#panel-observe_and_pickup">observe_and_pickup</a></th><td class="result-unavailable"><span aria-label="Not included in the two-task B3 run">—</span></td><td><strong>5%</strong><span class="result-count">5 / 100</span></td></tr>
+            <tr><th scope="row"><a class="task-link" href="#panel-press_button">press_button</a></th><td class="result-unavailable"><span aria-label="Not included in the two-task B3 run">—</span></td><td><strong>2%</strong><span class="result-count">2 / 100</span></td></tr>
+          </tbody>
+        </table></div>
+        <p class="results-context">The three-task B4 model achieves <strong>16.3%</strong> overall (49 / 300). Its lower T-block swapping score does not isolate the effect of direct observer attention: the B3 and B4 runs also differ in task mix and training exposure per task.</p>
+      </div>
     </section>
 
 <section id="case-explorer" class="slide" aria-labelledby="cases-title">
@@ -316,7 +334,7 @@
               <div><dt>Evaluation episodes per task</dt><dd>20 validation · 100 test</dd></div>
               <div><dt>Training</dt><dd>20,000 updates</dd></div>
               <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
-              <div><dt>Other ten-task models</dt><dd>C3 and B4 validation complete</dd></div>
+              <div><dt>Other ten-task models</dt><dd>No-TTT baseline: validation and test complete; C3 and B4 validation complete</dd></div>
             </dl>
           </div>
         </article>

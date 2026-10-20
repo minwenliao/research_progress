@@ -223,7 +223,7 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 }
 
 
-/* The comparison uses shared tasks, separate from the ten-task B3 total. */
+/* Matched ten-task comparison and additional large-data test results. */
 .result-not-reported { font-size: 16px; }
 .ttt-comparison { margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--rule); }
 .comparison-subtitle { margin-top: 8px; color: var(--muted); }
@@ -250,6 +250,17 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
   .baseline-summary td span { font-size: 13px; }
   .comparison-note { overflow-wrap: anywhere; }
 }
+
+
+.final-comparison { table-layout: fixed; min-width: 680px; }
+.final-comparison th:first-child { width: 32%; }
+.final-comparison td { width: 17%; }
+.additional-results { margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--rule); }
+.additional-results .table-wrap { margin-top: 24px; }
+.large-data-test { table-layout: fixed; min-width: 620px; }
+.large-data-test th:first-child { width: 36%; }
+.large-data-test td { width: 32%; }
+.large-data-test td strong { font-size: 23px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
