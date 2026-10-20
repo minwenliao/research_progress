@@ -29,7 +29,7 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>Test-time training (TTT) memory can guide Flex-π’s later decisions, but storing information does not guarantee that the policy will use it. Our experiments examine how training scale, memory retention, and the use of memory content affect behavior.</p>
+        <p>Test-time training (TTT) memory can guide Flex-π’s later decisions. However, in some settings, the model stores relevant information without using it to guide target selection. Our experiments examine how training scale, memory retention, and memory content affect behavior.</p>
         <p>Our ten-task baseline uses 50 demonstrations per task (45 for training, five held out) and achieves 38.1% success over 1,000 test episodes (100 per task), with 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
       </div>
       <div class="findings-content">
@@ -41,13 +41,10 @@
           <h3 id="finding-persistence">Training shapes a policy’s dependence on memory</h3>
           <p>With 200 demonstrations per task, retaining memory during training and evaluation outperforms resetting it at every policy call on <a href="#update-put_back_block">block return</a> (<strong>20/20 vs. 7/20</strong>) and <a href="#update-place_block_mat">multi-block return</a> (<strong>8/20 vs. 0/20</strong>). In the <a href="#controls">earlier 16-step, 6,000-update block-ordering study</a>, resetting memory only during evaluation reduces success from <strong>26/100 to 0/100</strong>, while a policy trained and evaluated with resets achieves <strong>30/100</strong>. Clearing memory can break a learned strategy even when the task can be solved without retaining it.</p>
         </article>
-        <article class="finding" aria-labelledby="finding-cue-use">
-          <h3 id="finding-cue-use">Storing information does not guarantee that the policy uses it</h3>
-          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, the robot must select an object matching a target shown earlier. A separate decoder identifies the target with <strong>85% accuracy</strong> on unseen scenes from memory recorded just after viewing. But at the first decision after hiding, swapping in memory of a different target leaves the chosen object unchanged in <strong>all 148 paired tests</strong>, with all other inputs and sampling noise fixed. Making the memory output 2 or 5 times stronger does not improve target selection.</p>
-        </article>
-        <article class="finding" aria-labelledby="finding-memory">
-          <h3 id="finding-memory">Memory content can causally guide later decisions</h3>
-          <p>In the earlier <a href="#panel-put_back_block">block-return experiment</a>, the robot should return the block to its starting mat, <strong>A</strong>. Keeping the model and current observation fixed, we swap in memory from a trial where the block started on mat <strong>B</strong>. All eight trials succeed with their original memory; after the swap, the robot moves the block toward <strong>B in 8/8 trials</strong>.</p>
+        <article id="finding-memory" class="finding" aria-labelledby="finding-cue-use">
+          <h3 id="finding-cue-use">Memory can guide decisions, but its use varies across settings</h3>
+          <p>An earlier <a href="#panel-put_back_block">block-return model</a> succeeds in all eight original trials. Holding its weights and current observation fixed, swapping in another episode’s memory redirects the block toward that episode’s starting mat in <strong>8/8 trials</strong>. This demonstrates a causal influence of memory content on the return target.</p>
+          <p>For the ten-task model on <a href="#update-observe_and_pickup">observe_and_pickup</a>, a decoder identifies the target from memory recorded just after viewing with <strong>85% accuracy on held-out scenes</strong>. Yet at the first decision after hiding, swapping in memory of a different target changes object choice in <strong>0/148 paired tests</strong>, with all other inputs and sampling noise fixed. These results suggest that, in some settings, the model can encode target information in memory without using it to guide subsequent choices.</p>
         </article>
       </div>
     </section>
@@ -210,7 +207,7 @@
     <h4 id="update-observe_and_pickup">Target identity can be decoded from memory, but does not guide the tested choices</h4>
     <p>This diagnostic uses the evaluated ten-task B3 policy and 292 scenes. The scenes are split into 175 for training the decoder, 43 for validation, and 74 for held-out testing. The decoder identifies the target from memory recorded immediately after the cue with <strong>85.0%</strong> held-out accuracy (95% CI: 81.9–87.9%), compared with 24.1% when the cue is absent.</p>
     <p>At the first decision after the target is hidden, we swap memory formed from different target cues while holding the current image, robot state, positional state, and action noise fixed. The selected object changes in <strong>0/148 held-out pairs</strong>.</p>
-    <p>Scaling the memory branch’s output by factors of 2 or 5 on the 43 validation scenes does not meet the predefined criteria for improved cue following. With a factor of 5, the fraction of reaches classified as too short rises to 67.5%. Neither setting proceeds to held-out testing. These results show a gap between encoding the cue and using it to choose an object, but do not identify a single cause.</p>
+    <p>Scaling the memory branch’s output by factors of 2 or 5 on the 43 validation scenes does not meet the predefined criteria for improved cue following. With a factor of 5, the fraction of reaches classified as too short rises to 67.5%. Neither setting proceeds to held-out testing. These results suggest that, in this tested setting, target information can be encoded in memory without guiding object selection. They do not identify a single cause.</p>
   </div>
 </article>
 </div>
