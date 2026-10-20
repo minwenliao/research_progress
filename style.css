@@ -146,6 +146,7 @@ tfoot th, tfoot td { border-top: 1px solid #999; border-bottom: 0; padding-top: 
 .task-analysis { grid-column: 1 / -1; max-width: 980px; margin-top: 2px; }
 .task-analysis h4 { margin-bottom: 8px; }
 .task-analysis p { color: #444; font-size: 18px; line-height: 1.5; }
+.task-analysis p + p { margin-top: 12px; }
 .cover-analysis p + p { margin-top: 14px; }
 .task-data-update { margin-top: 26px; }
 .task-data-update .task-stage-comparison { margin-top: 16px; }

@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Flex-π + TTT research progress: task success with 50, 200, and 500 demonstrations per task, and memory interventions.">
   <title>Flex-π + TTT experiments — 19 Oct 2026 — Minwen Liao</title>
-  <link rel="stylesheet" href="style.css?v=20261019-model-labels">
+  <link rel="stylesheet" href="style.css?v=20261019-language-review">
   <script src="app.js?v=20261018-report" defer></script>
 </head>
 <body>
@@ -29,24 +29,24 @@
 <section id="findings" class="slide" aria-labelledby="findings-title">
       <div class="section-heading">
         <h2 id="findings-title">Main findings</h2>
-        <p>We study whether TTT memory helps Flex-π use earlier observations when acting. Each of the ten tasks has 50 demonstrations: 45 for training and five held out. The joint ten-task model achieves 38.1% success across 100 test episodes per task (1,000 total), including 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
+        <p>We study whether test-time training (TTT) memory helps Flex-π use earlier observations to guide later actions. In our ten-task baseline, each task has 50 demonstrations: 45 for training and five held out. The model, trained jointly on all ten tasks with persistent memory, achieves 38.1% success across 100 test episodes per task (1,000 total), including 95% on block rearrangement, 94% on block ordering, and 84% on block return.</p>
       </div>
       <div class="findings-content">
         <article class="finding" aria-labelledby="finding-scaling">
           <h3 id="finding-scaling">More training data improves success on several tasks, but not all</h3>
-          <p>With 200 demos/task, <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multiple-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demos/task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. More data helps several manipulation tasks, while choosing the required uncovering order remains difficult.</p>
+          <p>With 200 demonstrations per task, <a href="#update-swap_blocks">block swapping</a> improves from <strong>6/20 to 17/20</strong> and <a href="#update-place_block_mat">multi-block return</a> from <strong>0/20 to 8/20</strong>. With 500 demonstrations per task, <a href="#panel-swap_T">T-block swapping</a> improves from <strong>2/20 to 16/20</strong>. Yet <a href="#panel-cover_blocks">ordered uncovering</a> remains at <strong>1/20</strong>, despite successful covering in all 20 episodes. More data improves several tasks, but the robot still struggles to uncover the blocks in the required order.</p>
         </article>
         <article class="finding" aria-labelledby="finding-persistence">
-          <h3 id="finding-persistence">Retaining history helps some tasks; clearing it at test time can disrupt a learned policy</h3>
-          <p>In the 200-demo runs, persistent memory achieves <strong>20/20 vs. 7/20</strong> on <a href="#update-put_back_block">block return</a> and <strong>8/20 vs. 0/20</strong> on <a href="#update-place_block_mat">multiple-block return</a>, compared with resetting memory during both training and evaluation. In the <a href="#controls">earlier 16-step block-ordering study</a>, clearing memory only at evaluation drops the same 6k checkpoint from <strong>26/100 to 0/100</strong>. A policy that learns to rely on history can lose that capability when its memory is cleared.</p>
+          <h3 id="finding-persistence">Retaining memory helps some tasks; clearing it at test time can disrupt a learned policy</h3>
+          <p>With 200 demonstrations per task, the model with persistent memory succeeds in <strong>20/20</strong> <a href="#update-put_back_block">block-return</a> episodes, compared with <strong>7/20</strong> for the model trained and evaluated with memory reset at every policy call. On <a href="#update-place_block_mat">multi-block return</a>, the corresponding results are <strong>8/20</strong> and <strong>0/20</strong>. In the <a href="#controls">earlier 16-step block-ordering study</a>, resetting memory only during evaluation reduces the same 6,000-update checkpoint’s success from <strong>26/100 to 0/100</strong>. A policy trained to retain history can depend on that history at test time.</p>
         </article>
         <article class="finding" aria-labelledby="finding-cue-use">
           <h3 id="finding-cue-use">The target cue is encoded, but object choice does not follow it</h3>
-          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, an external probe identifies the displayed target from post-cue memory with <strong>85% accuracy</strong> on held-out scenes. However, at the first decision after hiding, changing only which target’s memory the policy receives changes the selected object in <strong>0/148 decision pairs</strong>. Multiplying the memory output by ×2 or ×5 also fails to improve cue following. Target information is present in memory, but it does not guide the tested choices: the diagnostic points to a failure to turn encoded target information into the corresponding action.</p>
+          <p>In <a href="#update-observe_and_pickup">observe_and_pickup</a>, an independent decoder identifies the displayed target from memory recorded immediately after the cue with <strong>85% accuracy</strong> on held-out scenes. At the first decision after the target is hidden, replacing that memory with memory formed from a different target cue, while keeping the other inputs and sampling noise fixed, leaves the selected object unchanged in <strong>all 148 paired comparisons</strong>. Scaling the memory output by factors of 2 or 5 also fails to improve cue following. The target information is encoded, but the policy does not use it to guide these choices.</p>
         </article>
         <article class="finding" aria-labelledby="finding-memory">
           <h3 id="finding-memory">Changing memory content changes where the robot returns the block</h3>
-          <p>In the earlier <a href="#panel-put_back_block">block-return experiment</a>, the robot must return a block to its original mat. Before the return decision, we replace its memory with memory from an episode that started on a different mat, keeping model weights and the current observation fixed. All eight trials succeed with their original memory; with swapped memory, <strong>8/8 redirect the block toward the other episode’s starting mat</strong>. The remembered starting location therefore has a causal influence on the robot’s return target.</p>
+          <p>In the earlier <a href="#panel-put_back_block">block-return experiment</a>, the robot must return a block to its original mat. Before the return decision, we replace its memory with memory from another episode in which the block started on a different mat, while keeping the model weights and current observation fixed. All eight trials succeed with their original memory. After the swap, the robot moves the block toward the other episode’s starting mat in <strong>8/8 trials</strong>. This shows that remembered starting-location information can causally influence the robot’s return target.</p>
         </article>
       </div>
     </section>
@@ -54,7 +54,7 @@
 <section id="results" class="slide" aria-labelledby="results-title">
       <div class="section-heading">
         <h2 id="results-title">RMBench results</h2>
-        <p>Persistent TTT memory (B3), across three training-set sizes. The 50-demo column reports test results; the larger-data runs report validation results.</p>
+        <p>Success rates for the model with persistent TTT memory (B3) at three dataset sizes. The 50-demo column reports test results; the larger-data runs report validation results.</p>
       </div>
       <p class="results-scroll-hint">Scroll horizontally to view all training sets.</p>
       <div class="table-wrap results-scroll" tabindex="0" role="region" aria-label="B3 results across training sets"><table class="results-table data-comparison">
@@ -64,7 +64,7 @@
 <tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td><strong>95%</strong><span class="result-count">95 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td><strong>94%</strong><span class="result-count">94 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td><strong>84%</strong><span class="result-count">84 / 100</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td><td><strong>100%</strong><span class="result-count">20 / 20</span></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Exchange two blocks across three trays using the empty tray, then press the button.</span></th><td><strong>52%</strong><span class="result-count">52 / 100</span></td><td><strong>85%</strong><span class="result-count">17 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Swap the positions of two blocks using a third, empty tray, then press the button.</span></th><td><strong>52%</strong><span class="result-count">52 / 100</span></td><td><strong>85%</strong><span class="result-count">17 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td><strong>31%</strong><span class="result-count">31 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td><strong>10%</strong><span class="result-count">10 / 100</span></td><td class="result-unavailable"><span aria-label="Not included in the four-task run">—</span></td><td><strong>80%</strong><span class="result-count">16 / 20</span></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td><strong>6%</strong><span class="result-count">6 / 100</span></td><td><strong>5%</strong><span class="result-count">1 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
@@ -73,15 +73,15 @@
 <tr><th scope="row"><a class="task-link" href="#panel-place_block_mat">place_block_mat</a><span class="task-description">Move blocks from blue mats to the green mat and return them to their original mats, starting from the left.</span></th><td><strong>2%</strong><span class="result-count">2 / 100</span></td><td><strong>40%</strong><span class="result-count">8 / 20</span></td><td class="result-unavailable"><span aria-label="Not included in the two-task run">—</span></td></tr>
         </tbody>
       </table></div>
-      <p class="results-context">Demo counts are per task: 50, 200, and 500 demos correspond to 45, 195, and 495 training demos, with five held out in each setting. Evaluation episode counts are also per task. All models trained for 20,000 updates and use 32-step execution. The 50-demo column reports test results; the other two report validation results. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means the task was not included in that training run.</p>
+      <p class="results-context">All counts are per task. Each dataset reserves five demonstrations, leaving 45, 195, or 495 for training. All models are trained for 20,000 updates and execute 32 action steps per policy call. Evaluation splits and task groups differ, so these columns do not isolate the effect of adding demonstrations. “—” means the task was not included in that training run.</p>
       <details class="test-results">
         <summary>Original ten-task results · 38.1% test success</summary>
         <p>B3 with 45 training demonstrations per task: <strong>381 / 1,000</strong> test successes. Validation and test episodes are separate simulation runs, not the held-out expert demonstrations.</p>
-      <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3, 32-step evaluation. Final successes across 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="original-results-body">
+      <div class="table-wrap"><table class="results-table final-results"><caption class="sr-only">B3 with 32-step execution: successes out of 20 validation and 100 test episodes per task</caption><thead><tr><th scope="col">Task</th><th scope="col">Validation</th><th scope="col">Test</th></tr></thead><tbody id="original-results-body">
 <tr><th scope="row"><a class="task-link" href="#panel-rearrange_blocks">rearrange_blocks</a><span class="task-description">Move the block from between the mats onto the empty mat, press the button, then move the other block into the space between the mats.</span></th><td>18 / 20</td><td><strong>95 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-blocks_ranking_try">blocks_ranking_try</a><span class="task-description">Rearrange three colored blocks, pressing the button after each attempt until the order is accepted.</span></th><td>18 / 20</td><td><strong>94 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-put_back_block">put_back_block</a><span class="task-description">Move a block to the center, press the button, then return it to its original mat.</span></th><td>16 / 20</td><td><strong>84 / 100</strong></td></tr>
-<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Exchange two blocks across three trays using the empty tray, then press the button.</span></th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
+<tr><th scope="row"><a class="task-link" href="#panel-swap_blocks">swap_blocks</a><span class="task-description">Swap the positions of two blocks using a third, empty tray, then press the button.</span></th><td>6 / 20</td><td><strong>52 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-battery_try">battery_try</a><span class="task-description">Insert two batteries into a slot, choosing their orientations to control a gauge.</span></th><td>4 / 20</td><td><strong>31 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-swap_T">swap_T</a><span class="task-description">Exchange the positions and orientations of two T-shaped blocks.</span></th><td>2 / 20</td><td><strong>10 / 100</strong></td></tr>
 <tr><th scope="row"><a class="task-link" href="#panel-cover_blocks">cover_blocks</a><span class="task-description">Cover three blocks from left to right, then uncover them in red, green, and blue order.</span></th><td>1 / 20</td><td><strong>6 / 100</strong></td></tr>
@@ -93,7 +93,7 @@
     </section>
 
 <section id="case-explorer" class="slide" aria-labelledby="cases-title">
-      <div class="section-heading"><h2 id="cases-title">Task rollouts</h2><p>Successes and failures from the original ten-task B3 model. The 200-demo updates below report separate four-task runs: both the data volume and task mix changed, so the comparisons do not isolate the effect of adding demonstrations.</p></div>
+      <div class="section-heading"><h2 id="cases-title">Task rollouts</h2><p>Each pair shows a successful and a failed episode from the original ten-task B3 model. The updates below report separate four-task runs with 200 demonstrations per task.</p></div>
       <nav class="task-index" aria-label="Jump to a task">
 <a href="#panel-rearrange_blocks">rearrange_blocks</a>
 <a href="#panel-blocks_ranking_try">blocks_ranking_try</a>
@@ -116,7 +116,7 @@
 <h3 id="task-blocks_ranking_try" class="task-title">blocks_ranking_try</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200000.jpg" aria-label="blocks_ranking_try · Success · Validation · 200000"><source src="assets/videos/e32c32/blocks_ranking_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/blocks_ranking_try_seed200008.jpg" aria-label="blocks_ranking_try · Failure · Validation · 200008"><source src="assets/videos/e32c32/blocks_ranking_try/seed200008.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200008</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-blocks_ranking_try"><h4 id="analysis-blocks_ranking_try">The ordering task times out</h4><p>The episode times out after 3,500 steps. We have not yet identified the first failed action, so it is still unclear whether the problem is the order or an incomplete transfer.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-blocks_ranking_try"><h4 id="analysis-blocks_ranking_try">The block-ordering episode reaches the step limit</h4><p>The episode reaches the 3,500-step limit without completing the task. The first failed action has not yet been identified.</p></article>
 </div>
 <div id="panel-put_back_block" class="task-gallery-panel" aria-labelledby="task-put_back_block">
 <h3 id="task-put_back_block" class="task-title">put_back_block</h3>
@@ -124,20 +124,20 @@
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/put_back_block_seed200001.jpg" aria-label="put_back_block · Failure · Validation · 200001"><source src="assets/videos/e32c32/put_back_block/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200001</figcaption></figure>
 <article class="task-analysis" aria-labelledby="analysis-put_back_block">
   <h4 id="analysis-put_back_block">The robot presses the button too early</h4>
-  <p>The robot presses the button before centering the block. It reaches the 500-step limit without finishing.</p>
+  <p>The robot presses the button before centering the block. The episode ends at the 500-step limit without completing the task.</p>
   <div class="task-data-update" aria-labelledby="update-put_back_block">
-    <h4 id="update-put_back_block">200-demo validation: B3 succeeds in 20/20 episodes</h4>
+    <h4 id="update-put_back_block">With 200 demos per task, B3 succeeds in 20/20 validation episodes</h4>
     <div class="table-wrap task-stage-comparison">
       <table>
-        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <caption>Successes on the same 20 validation seeds · 32-step execution</caption>
         <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
-          <tr><th scope="row">B3 · memory kept</th><td>16/20</td><td><strong>20/20</strong></td></tr>
-          <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>7/20</td></tr>
+          <tr><th scope="row">B3 · memory retained</th><td>16/20</td><td><strong>20/20</strong></td></tr>
+          <tr><th scope="row">C3 · memory reset each call</th><td>0/20</td><td>7/20</td></tr>
         </tbody>
       </table>
     </div>
-    <p>In the four-task run, B3 succeeds on all 20 validation seeds, while C3 succeeds on seven. The remaining 13 seeds are successes for B3 only, supporting a benefit from retaining memory in this run.</p>
+    <p>In the four-task run, B3 succeeds on all 20 validation seeds, while C3 succeeds on seven. B3 succeeds on all 13 episodes that C3 fails, supporting a benefit from retaining memory in this run.</p>
   </div>
 </article>
 </div>
@@ -146,21 +146,21 @@
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200040.jpg" aria-label="swap_blocks · Success · Validation · 200040"><source src="assets/videos/e32c32/swap_blocks/seed200040.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200040</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_blocks_seed200000.jpg" aria-label="swap_blocks · Failure · Validation · 200000"><source src="assets/videos/e32c32/swap_blocks/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
 <article class="task-analysis" aria-labelledby="analysis-swap_blocks">
-  <h4 id="analysis-swap_blocks">Two transfers work; the third grasp misses</h4>
-  <p>The third grasp misses by 2.1 cm. The gripper pushes the block’s edge and lifts empty, then moves to the destination tray, opens, and presses the button.</p>
+  <h4 id="analysis-swap_blocks">The first two transfers succeed; the third grasp fails</h4>
+  <p>The third grasp is offset by 2.1 cm. The gripper pushes against the block’s edge, then lifts without the block, moves to the destination tray, opens, and presses the button.</p>
   <div class="task-data-update" aria-labelledby="update-swap_blocks">
-    <h4 id="update-swap_blocks">200-demo validation: B3 succeeds in 17/20 episodes</h4>
+    <h4 id="update-swap_blocks">With 200 demos per task, B3 succeeds in 17/20 validation episodes</h4>
     <div class="table-wrap task-stage-comparison">
       <table>
-        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <caption>Successes on the same 20 validation seeds · 32-step execution</caption>
         <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
-          <tr><th scope="row">B3 · memory kept</th><td>6/20</td><td><strong>17/20</strong></td></tr>
-          <tr><th scope="row">C3 · reset each call</th><td>8/20</td><td>15/20</td></tr>
+          <tr><th scope="row">B3 · memory retained</th><td>6/20</td><td><strong>17/20</strong></td></tr>
+          <tr><th scope="row">C3 · memory reset each call</th><td>8/20</td><td>15/20</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Both models improve substantially, including C3, which resets memory at every call. In the four-task run, B3 leads C3 by two successful episodes; this small validation sample does not establish a clear advantage from retaining memory.</p>
+    <p>Success increases for both B3 and C3, which resets memory at every call. In the four-task run, B3 leads C3 by two successful episodes; this small validation sample does not establish a clear advantage from retaining memory.</p>
   </div>
 </article>
 </div>
@@ -168,21 +168,21 @@
 <h3 id="task-battery_try" class="task-title">battery_try</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200000.jpg" aria-label="battery_try · Success · Validation · 200000"><source src="assets/videos/e32c32/battery_try/seed200000.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200000</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/battery_try_seed200005.jpg" aria-label="battery_try · Failure · Validation · 200005"><source src="assets/videos/e32c32/battery_try/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200005</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-battery_try"><h4 id="analysis-battery_try">The second battery slips during placement</h4><p>The second battery is lowered about 3 cm off target, toward the first battery’s position. It slips during the descent and falls onto the table. The policy keeps adjusting the first battery without retrieving the second.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-battery_try"><h4 id="analysis-battery_try">The second battery slips during placement</h4><p>The second battery is lowered about 3 cm off target, toward the first battery’s position. It slips during the descent and falls onto the table. The robot continues adjusting the first battery without retrieving the second.</p></article>
 </div>
 <div id="panel-swap_T" class="task-gallery-panel" aria-labelledby="task-swap_T">
 <h3 id="task-swap_T" class="task-title">swap_T</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200003.jpg" aria-label="swap_T · Success · Validation · 200003"><source src="assets/videos/e32c32/swap_T/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200003</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/swap_T_seed200001.jpg" aria-label="swap_T · Failure · Validation · 200001"><source src="assets/videos/e32c32/swap_T/seed200001.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200001</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-swap_T"><h4 id="analysis-swap_T">The blocks change sides, but the second T has the wrong angle</h4><p>The second T is placed about 17° from the target orientation; the task allows 15°. Later adjustments also rotate the first T away from its target orientation.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-swap_T"><h4 id="analysis-swap_T">The blocks swap positions, but the second T is misaligned</h4><p>The second T is placed with an orientation error of about 17°, exceeding the task’s 15° tolerance. Later adjustments also rotate the first T away from its target orientation.</p></article>
 </div>
 <div id="panel-cover_blocks" class="task-gallery-panel" aria-labelledby="task-cover_blocks">
 <h3 id="task-cover_blocks" class="task-title">cover_blocks</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200016.jpg" aria-label="cover_blocks · Success · Validation · 200016"><source src="assets/videos/e32c32/cover_blocks/seed200016.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200016</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/cover_blocks_seed200002.jpg" aria-label="cover_blocks · Failure · Validation · 200002"><source src="assets/videos/e32c32/cover_blocks/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
 <article class="task-analysis cover-analysis" aria-labelledby="analysis-cover_blocks">
-  <h4 id="analysis-cover_blocks">The robot covers the blocks but often chooses the wrong lid to uncover</h4>
-  <p>The blocks must be uncovered in red, green, and blue order after their colors are hidden. In the failed rollout above (seed 200002), the robot removes the middle lid first; the evaluator records the order violation at step 637.</p>
+  <h4 id="analysis-cover_blocks">The robot covers the blocks but often removes the wrong lid first</h4>
+  <p>Once all three blocks are covered, the robot must uncover them in order: red, green, then blue. In the failed rollout above (seed 200002), the robot removes the middle lid first; the evaluator records the order violation at step 637.</p>
   <p>In the ten-task B3 test run, the robot covered all three blocks in <strong>100/100</strong> episodes, selected the correct first lid in <strong>29/100</strong>, and completed the task in <strong>6/100</strong>. For reference, choosing uniformly among three lids gives a 1/3 probability of selecting the correct first lid.</p>
   <div class="table-wrap task-stage-comparison">
     <table>
@@ -190,12 +190,12 @@
       <thead><tr><th scope="col">Outcome</th><th scope="col">10-task B3<br>50 demos/task</th><th scope="col">4-task B3<br>200 demos/task</th></tr></thead>
       <tbody>
         <tr><th scope="row">All three blocks covered</th><td>20/20</td><td>20/20</td></tr>
-        <tr><th scope="row">Correct first lid</th><td>7/20</td><td>7/20</td></tr>
+        <tr><th scope="row">Correct lid removed first</th><td>7/20</td><td>7/20</td></tr>
         <tr><th scope="row">Task completed</th><td>1/20</td><td>1/20</td></tr>
       </tbody>
     </table>
   </div>
-  <p>The larger-data run produced the same validation counts. The task mix also changed, so this comparison does not isolate the effect of data volume. We have not yet determined whether the model fails to store which color is under each lid or fails to use that information when choosing.</p>
+  <p>The four-task run with 200 demonstrations per task produced the same validation counts. We have not yet determined whether the model fails to remember the colors beneath the lids or fails to use that information when choosing which lid to remove.</p>
 </article>
 </div>
 <div id="panel-observe_and_pickup" class="task-gallery-panel" aria-labelledby="task-observe_and_pickup">
@@ -203,12 +203,13 @@
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200003.jpg" aria-label="observe_and_pickup · Success · Validation · 200003"><source src="assets/videos/e32c32/observe_and_pickup/seed200003.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200003</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/observe_and_pickup_seed200005.jpg" aria-label="observe_and_pickup · Failure · Validation · 200005"><source src="assets/videos/e32c32/observe_and_pickup/seed200005.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200005</figcaption></figure>
 <article class="task-analysis" aria-labelledby="analysis-observe_and_pickup">
-  <h4 id="analysis-observe_and_pickup">The target is a mouse; the policy lifts a stapler</h4>
+  <h4 id="analysis-observe_and_pickup">The target is a mouse, but the robot picks up a stapler</h4>
   <p>A mouse is shown at the start, then hidden behind a wall. The robot grasps and lifts the stapler about 7 cm from the mouse.</p>
   <div class="task-data-update" aria-labelledby="update-observe_and_pickup">
-    <h4 id="update-observe_and_pickup">Cue information is decodable, but the tested choices do not follow it</h4>
-    <p>The reported cue diagnostic uses the evaluated ten-task B3 policy and 292 scenes, split by scene into 175 training, 43 validation, and 74 held-out test scenes. Target identity is decoded from memory immediately after the cue with <strong>85.0%</strong> held-out accuracy (95% CI: 81.9–87.9%), compared with 24.1% from the no-cue version.</p>
-    <p>At the first decision after hiding the target, holding the current image, robot state, position, and action noise fixed while swapping cue-conditioned memory changes the chosen object in <strong>0/148 held-out pairs</strong>. Scaling the memory branch’s output by ×2 or ×5 on the 43 validation scenes also fails the predefined cue-following improvement criteria; ×5 increases too-short reaches to 67.5%. No scaled setting advances to held-out testing. The evidence shows a gap between cue encoding and its use in the tested decisions; it does not determine a unique underlying cause.</p>
+    <h4 id="update-observe_and_pickup">Target identity can be decoded from memory, but does not guide the tested choices</h4>
+    <p>This diagnostic uses the evaluated ten-task B3 policy and 292 scenes. The scenes are split into 175 for training the decoder, 43 for validation, and 74 for held-out testing. The decoder identifies the target from memory recorded immediately after the cue with <strong>85.0%</strong> held-out accuracy (95% CI: 81.9–87.9%), compared with 24.1% when the cue is absent.</p>
+    <p>At the first decision after the target is hidden, we swap memory formed from different target cues while holding the current image, robot state, positional state, and action noise fixed. The selected object changes in <strong>0/148 held-out pairs</strong>.</p>
+    <p>Scaling the memory branch’s output by factors of 2 or 5 on the 43 validation scenes does not meet the predefined criteria for improved cue following. With a factor of 5, the fraction of reaches classified as too short rises to 67.5%. Neither setting proceeds to held-out testing. These results show a gap between encoding the cue and using it to choose an object, but do not identify a single cause.</p>
   </div>
 </article>
 </div>
@@ -216,28 +217,28 @@
 <h3 id="task-press_button" class="task-title">press_button</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200017.jpg" aria-label="press_button · Success · Validation · 200017"><source src="assets/videos/e32c32/press_button/seed200017.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200017</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/press_button_seed200004.jpg" aria-label="press_button · Failure · Validation · 200004"><source src="assets/videos/e32c32/press_button/seed200004.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200004</figcaption></figure>
-<article class="task-analysis" aria-labelledby="analysis-press_button"><h4 id="analysis-press_button">The card says one press; the policy makes four</h4><p>The card calls for one press, but the robot presses the button four times and its confirmation is rejected. Each physical press registers once. We do not yet know whether it misreads the card, forgets the number, or miscounts.</p></article>
+<article class="task-analysis" aria-labelledby="analysis-press_button"><h4 id="analysis-press_button">The card calls for one press, but the robot presses four times</h4><p>The card calls for one press, but the robot presses the button four times and the task rejects the final confirmation. Each physical press registers once. We do not yet know whether it misreads the card, forgets the number, or miscounts.</p></article>
 </div>
 <div id="panel-place_block_mat" class="task-gallery-panel" aria-labelledby="task-place_block_mat">
 <h3 id="task-place_block_mat" class="task-title">place_block_mat</h3>
 <figure class="video-figure gallery-card success-card"><div class="video-label"><span>Success</span><span>Test</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed100042.jpg" aria-label="place_block_mat · Success · Test · 100042"><source src="assets/videos/e32c32/place_block_mat/seed100042.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 100042</figcaption></figure>
 <figure class="video-figure gallery-card failure-card"><div class="video-label"><span>Failure</span><span>Validation</span></div><video controls playsinline preload="metadata" poster="assets/posters/e32c32/place_block_mat_seed200002.jpg" aria-label="place_block_mat · Failure · Validation · 200002"><source src="assets/videos/e32c32/place_block_mat/seed200002.mp4" type="video/mp4">Your browser does not support video playback.</video><figcaption>seed 200002</figcaption></figure>
 <article class="task-analysis" aria-labelledby="analysis-place_block_mat">
-  <h4 id="analysis-place_block_mat">The first grasp closes over an empty mat</h4>
+  <h4 id="analysis-place_block_mat">The gripper closes over an empty mat on the first attempt</h4>
   <p>At step 60, the gripper closes over an empty mat, 9.5 cm from the leftmost block, without touching it. It then lifts, moves to the green mat, opens, and returns without carrying the block.</p>
   <div class="task-data-update" aria-labelledby="update-place_block_mat">
-    <h4 id="update-place_block_mat">200-demo validation: B3 succeeds in 8/20 episodes</h4>
+    <h4 id="update-place_block_mat">With 200 demos per task, B3 succeeds in 8/20 validation episodes</h4>
     <div class="table-wrap task-stage-comparison">
       <table>
-        <caption>Successes on the same 20 validation seeds · 32-step evaluation</caption>
+        <caption>Successes on the same 20 validation seeds · 32-step execution</caption>
         <thead><tr><th scope="col">Model</th><th scope="col">10-task run<br>50 demos/task</th><th scope="col">4-task run<br>200 demos/task</th></tr></thead>
         <tbody>
-          <tr><th scope="row">B3 · memory kept</th><td>0/20</td><td><strong>8/20</strong></td></tr>
-          <tr><th scope="row">C3 · reset each call</th><td>0/20</td><td>0/20</td></tr>
+          <tr><th scope="row">B3 · memory retained</th><td>0/20</td><td><strong>8/20</strong></td></tr>
+          <tr><th scope="row">C3 · memory reset each call</th><td>0/20</td><td>0/20</td></tr>
         </tbody>
       </table>
     </div>
-    <p>The four-task B3 solves eight validation episodes that neither ten-task model completed. C3 remains at 0/20 in the four-task setting. This result supports a benefit from retaining memory in this validation run.</p>
+    <p>The four-task B3 model completes eight validation episodes; neither ten-task model completed any. C3 remains at 0/20 in the four-task setting. This result supports a benefit from retaining memory in this validation run.</p>
   </div>
 </article>
 </div>
@@ -245,18 +246,18 @@
 
 <section id="robomme" class="slide" aria-labelledby="robomme-title">
       
-<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2><p>The robot must remove a cover to expose a hidden object. The videos below show four model variants on the same episode.</p></div>
-      <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">Selected checkpoint: step 4,000</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">Selected checkpoint: step 6,000</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>C3 · reset in training + test</h3><p class="clip-provenance">Selected checkpoint: step 2,000</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · reset only at evaluation</h3><p class="clip-provenance">Same B3 weights · 6k</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully with the same B3 weights and memory reset.</figcaption></figure></div>
+<div class="section-heading"><h2 id="robomme-title">VideoUnmask: episode 005</h2><p>The robot must lift a cover to reveal the target object. The videos show the same episode under four model settings, including B3 with its memory reset only during evaluation.</p></div>
+      <div class="robomme-grid"><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>A · no TTT</h3><p class="clip-provenance">Selected checkpoint: step 4,000</p><video controls playsinline preload="metadata" poster="media/robomme/a_test005_timeout.jpg" aria-label="VideoUnmask episode 005, A · no TTT, Timeout"><source src="media/robomme/a_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated manipulation attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · persistent TTT</h3><p class="clip-provenance">Selected checkpoint: step 6,000</p><video controls playsinline preload="metadata" poster="media/robomme/b3_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · persistent TTT, Success"><source src="media/robomme/b3_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover and exposes the blue object.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Timeout</span><code>test / 005</code></div><h3>C3 · memory reset during training and evaluation</h3><p class="clip-provenance">Selected checkpoint: step 2,000</p><video controls playsinline preload="metadata" poster="media/robomme/c3_test005_timeout.jpg" aria-label="VideoUnmask episode 005, C3 · reset in training + test, Timeout"><source src="media/robomme/c3_test005_timeout.mp4" type="video/mp4"></video><figcaption>Repeated attempts; the episode times out.</figcaption></figure><figure class="video-figure robomme-card"><div class="video-label"><span>Success</span><code>test / 005</code></div><h3>B3 · memory reset only during evaluation</h3><p class="clip-provenance">Same B3 weights · step 6,000</p><video controls playsinline preload="metadata" poster="media/robomme/b3_evalreset_test005_success.jpg" aria-label="VideoUnmask episode 005, B3 · reset only at evaluation, Success"><source src="media/robomme/b3_evalreset_test005_success.mp4" type="video/mp4"></video><figcaption>Lifts the cover successfully even with memory reset.</figcaption></figure></div>
       <div class="video-toolbar"><button id="robomme-play" class="button primary" type="button">Play all from the start</button><span id="robomme-status" role="status"></span></div>
       
     </section>
 
 <section id="architectures" class="slide" aria-labelledby="architectures-title">
 
-<div class="section-heading"><h2 id="architectures-title">Model variants</h2><p>We vary TTT, memory persistence, and direct observer-to-action attention. Run IDs in parentheses match the diagrams.</p></div>
+<div class="section-heading"><h2 id="architectures-title">Model variants</h2><p>The variants differ in whether they include TTT, retain memory between policy calls, and allow action tokens to attend directly to observer tokens. The labels below match those in the diagrams.</p></div>
       <div class="figure-tabs case-tabs" role="tablist" aria-label="Architecture comparisons"><button role="tab" id="figure-tab-0" aria-controls="figure-panel-0" aria-selected="true" tabindex="0">A · B3 · C3</button><button role="tab" id="figure-tab-1" aria-controls="figure-panel-1" aria-selected="false" tabindex="-1">A · B4 · C4</button><button role="tab" id="figure-tab-2" aria-controls="figure-panel-2" aria-selected="false" tabindex="-1">3 vs. 4</button><button role="tab" id="figure-tab-3" aria-controls="figure-panel-3" aria-selected="false" tabindex="-1">Carry vs. reset</button></div>
       <div id="figure-panel-0" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-0">
-        <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights. C3 starts each call from learned W₀, then performs the same update and read operations.</figcaption></figure>
+        <figure><a class="diagram-open" href="figures/abc-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B3 · C3 diagram at full size"><img src="figures/abc-overview.svg" width="1920" height="1080" alt="B3 retains committed fast weights across policy calls. C3 resets them to the learned initialization W₀ before each call, then performs the same update and read operations."></a><figcaption>B3 retains committed fast weights across policy calls. C3 resets them to the learned initialization W₀ before each call, then performs the same update and read operations.</figcaption></figure>
       </div>
       <div id="figure-panel-1" class="figure-panel" role="tabpanel" aria-labelledby="figure-tab-1" hidden>
         <figure><a class="diagram-open" href="figures/abc-visible-overview.svg" target="_blank" rel="noopener" aria-label="Open A · B4 · C4 diagram at full size"><img src="figures/abc-visible-overview.svg" width="1920" height="1080" alt="B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference."></a><figcaption>B4/C4 allow direct observer-to-action attention. B4 retains fast weights; C4 resets them during both training and inference.</figcaption></figure>
@@ -268,7 +269,7 @@
         <figure><a class="diagram-open" href="figures/memory-persistence.svg" target="_blank" rel="noopener" aria-label="Open Carry vs. reset diagram at full size"><img src="figures/memory-persistence.svg" width="1920" height="1080" alt="B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference."></a><figcaption>B saves fast weights at scheduled commits and resets them between episodes. C resets on every call during training and inference.</figcaption></figure>
       </div>
 
-      <div class="table-wrap"><table class="arm-table"><caption>Variants relative to TTT memory (B3)</caption><thead>
+      <div class="table-wrap"><table class="arm-table"><caption>Model variants and memory behavior</caption><thead>
 <tr><th scope="col">Variant</th><th scope="col">TTT block</th><th scope="col">Memory across calls</th><th scope="col">Direct observer attention</th></tr></thead><tbody>
         
 <tr><th scope="row">w/o TTT <span class="variant-id">(A)</span></th><td>Absent</td><td>—</td><td>—</td></tr>
@@ -281,7 +282,7 @@
         
 <tr><th scope="row">w/o persistent memory,<br>w/ direct observer attention <span class="variant-id">(C4)</span></th><td>Update + read</td><td>Reset each call in training &amp; inference</td><td>Allowed</td></tr>
       </tbody></table></div>
-      <div class="margin-note full"><p><strong>w/o persistent memory at evaluation only (B@reset)</strong> uses the trained B weights and resets TTT fast weights each call only during evaluation. C3/C4 also reset during training. Within-call TTT updates and reads remain active.</p></div>
+      <div class="margin-note full"><p><strong>w/o persistent memory during evaluation only (B@reset)</strong> uses the trained B model but resets its fast-weight memory for every evaluation call. C3/C4 reset memory during both training and evaluation. Within-call TTT updates and reads remain active.</p></div>
       
     </section>
 
@@ -290,34 +291,34 @@
 <div class="section-heading"><h2 id="data-title">Data and training</h2></div>
       <div class="data-overview">
         <article class="dataset-row" aria-labelledby="rmbench-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>Current ten-task B3</p></div>
+          <div class="dataset-identity"><h3 id="rmbench-data-title">RMBench</h3><p>Ten-task B3 baseline</p></div>
           <div class="dataset-content">
             <p class="dataset-count"><span><strong>45</strong> training demonstrations</span><span class="dataset-count-separator" aria-hidden="true">+</span><span><strong>5</strong> held out per task</span></p>
             <dl class="dataset-facts">
               <div><dt>Total demonstrations</dt><dd>450 train · 50 held out</dd></div>
-              <div><dt>Simulation runs per task</dt><dd>20 validation · 100 test</dd></div>
+              <div><dt>Evaluation episodes per task</dt><dd>20 validation · 100 test</dd></div>
               <div><dt>Training</dt><dd>20,000 updates</dd></div>
               <div><dt>Pretrained model</dt><dd>RoboTwin Flex-π</dd></div>
-              <div><dt>Other 10-task models</dt><dd>C3 and B4 validation complete</dd></div>
+              <div><dt>Other ten-task models</dt><dd>C3 and B4 validation complete</dd></div>
             </dl>
           </div>
         </article>
         <article class="dataset-row" aria-labelledby="rmbench-expanded-data-title">
-          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>Separate 200-demo run · 4 tasks</p></div>
+          <div class="dataset-identity"><h3 id="rmbench-expanded-data-title">RMBench</h3><p>Four-task B3/C3 · 200 demos per task</p></div>
           <div class="dataset-content">
-            <p class="dataset-count"><span><strong>780</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>20</strong> held out in total</span></p>
+            <p class="dataset-count"><span><strong>780</strong> training demonstrations</span><span class="dataset-count-separator" aria-hidden="true">+</span><span><strong>20</strong> held out in total</span></p>
             <dl class="dataset-facts">
               <div><dt>Tasks</dt><dd>put_back_block, swap_blocks, cover_blocks, place_block_mat</dd></div>
               <div><dt>Models</dt><dd>Separate B3 and C3 runs</dd></div>
               <div><dt>Training</dt><dd>20,000 updates each</dd></div>
-              <div><dt>Evaluation</dt><dd>Validation complete; <a href="#update-put_back_block">per-task updates above</a></dd></div>
+              <div><dt>Evaluation</dt><dd>Validation complete; <a href="#update-put_back_block">validation results by task</a></dd></div>
             </dl>
           </div>
         </article>
         <article class="dataset-row" aria-labelledby="robomme-data-title">
           <div class="dataset-identity"><h3 id="robomme-data-title">RoboMME</h3><p>VideoUnmask</p></div>
           <div class="dataset-content">
-            <p class="dataset-count"><span><strong>90</strong> train</span><span class="dataset-count-separator" aria-hidden="true">/</span><span><strong>10</strong> held out</span></p>
+            <p class="dataset-count"><span><strong>90</strong> training demonstrations</span><span class="dataset-count-separator" aria-hidden="true">+</span><span><strong>10</strong> held out</span></p>
             <dl class="dataset-facts">
               <div><dt>Evaluation episodes</dt><dd>20 validation · 50 test</dd></div>
               <div><dt>Pretrained model</dt><dd>LIBERO Flex-π</dd></div>
@@ -330,7 +331,7 @@
 
 <section id="controls" class="slide" aria-labelledby="controls-title">
       
-<div class="section-heading"><h2 id="controls-title">Earlier controlled comparisons</h2><p>These models were trained on smaller task groups and evaluated with the earlier 16-step protocol. A has no TTT; B3 retains memory across calls; C3 resets memory during both training and evaluation. B3@reset resets a trained B3 model only during evaluation.</p></div>
+<div class="section-heading"><h2 id="controls-title">Earlier memory comparisons</h2><p>These models were trained on smaller task groups and evaluated with the earlier 16-step protocol. A has no TTT; B3 retains memory across calls; C3 resets memory during both training and evaluation. B3@reset uses B3’s trained weights and resets only its memory during evaluation.</p></div>
       <div class="table-wrap">
         <table class="controls-table">
           <caption class="sr-only">Previously reported controls from distinct experiments</caption>
@@ -340,11 +341,11 @@
             
 <tr><th scope="row">Original three-task study<span>put_back_block · test</span></th><td><strong>B3: 51 / 100</strong><br>A: 0 / 100 · C3: 0 / 94<br>B3@reset: 0 / 57</td><td>The C3 and B3@reset evaluations are incomplete.</td></tr>
             
-<tr><th scope="row">Four-task study<span>test · 400 episodes</span></th><td><strong>B3: 47 / 400</strong><br>C3: 28 / 400 · A: 27 / 400<br>B3@reset: 3 / 400</td><td>B3 uses step 8,000; B3@reset uses step 2,000. These independently selected checkpoints do not provide a same-weights test of memory reset.</td></tr>
+<tr><th scope="row">Four-task study<span>test · 400 episodes</span></th><td><strong>B3: 47 / 400</strong><br>C3: 28 / 400 · A: 27 / 400<br>B3@reset: 3 / 400</td><td>B3 uses the checkpoint from update 8,000; B3@reset uses update 2,000. Because the checkpoints differ, this comparison does not isolate the effect of resetting memory.</td></tr>
             
-<tr><th scope="row">Later three-task study<span>blocks_ranking_try · test · 6k</span></th><td><strong>B3: 26 / 100</strong><br>C3: 30 / 100 · A: 4 / 100<br>B3@reset: 0 / 100</td><td>Resetting the same B3 weights reduces its score, while C3 scores slightly higher than B3.</td></tr>
+<tr><th scope="row">Later three-task study<span>blocks_ranking_try · test · 6,000 updates</span></th><td><strong>B3: 26 / 100</strong><br>C3: 30 / 100 · A: 4 / 100<br>B3@reset: 0 / 100</td><td>With B3’s weights fixed, resetting memory during evaluation reduces its score. The separately trained C3 model scores slightly higher.</td></tr>
             
-<tr><th scope="row">Later three-task study<span>battery_try · test · 6k</span></th><td><strong>B3: 21 / 100</strong><br>C3: 23 / 100 · A: 17 / 100<br>B3@reset: 20 / 100</td><td>These results show no clear advantage from retaining memory in this run.</td></tr>
+<tr><th scope="row">Later three-task study<span>battery_try · test · 6,000 updates</span></th><td><strong>B3: 21 / 100</strong><br>C3: 23 / 100 · A: 17 / 100<br>B3@reset: 20 / 100</td><td>These results show no clear advantage from retaining memory in this run.</td></tr>
           </tbody>
         </table>
       </div>
