@@ -49,3 +49,25 @@
   }));
 
 })();
+
+
+(() => {
+  const tabs = [...document.querySelectorAll('#weekly-result-tabs [role="tab"]')];
+  const select = (tab, focus = false) => {
+    tabs.forEach(item => {
+      const active = item === tab;
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+      document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
+    });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', e => {
+      const targets = {ArrowRight:(i+1)%tabs.length, ArrowLeft:(i-1+tabs.length)%tabs.length, Home:0, End:tabs.length-1};
+      if (!(e.key in targets)) return;
+      e.preventDefault(); select(tabs[targets[e.key]], true);
+    });
+  });
+})();
